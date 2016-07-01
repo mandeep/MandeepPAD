@@ -1,5 +1,5 @@
 import sys
-from PyQt5.QtWidgets import QMainWindow, QApplication, QTextEdit
+from PyQt5.QtWidgets import *
 
 
 class TextEditor(QMainWindow):
@@ -19,12 +19,37 @@ class TextEditor(QMainWindow):
         self.initMenuBar()
         self.statusbar = self.statusBar()
 
+        self.filename = ""
+
     def initMenuBar(self):
         menubar = self.menuBar()
         file = menubar.addMenu('File')
         edit = menubar.addMenu('Edit')
         preferences = menubar.addMenu('Preferences')
         help_menu = menubar.addMenu('Help')
+
+        self.newAction = QAction('New', self)
+        self.newAction.setStatusTip('Create a new document.')
+        self.newAction.setShortcut('CTRL+N')
+        self.newAction.triggered.connect(self.new)
+
+        self.openAction = QAction('Open', self)
+        self.openAction.setStatusTip('Open an existing document.')
+        self.openAction.setShortcut('CTRL+O')
+        self.openAction.triggered.connect(self.open)
+
+        file.addAction(self.newAction)
+        file.addAction(self.openAction)
+
+    def new(self):
+        new_window = TextEditor(self)
+        new_window.show()
+
+    def open(self):
+        self.filename = QFileDialog.getOpenFileName(self, 'Open File', '.', '(*.txt)')
+        if self.filename:
+            with open(self.filename, 'rt') as file:
+                self.text.setText(file.read())
 
 
 def main():
