@@ -31,24 +31,24 @@ class TextEditor(QMainWindow):
         self.newAction = QAction('New', self)
         self.newAction.setStatusTip('Create a new document.')
         self.newAction.setShortcut('CTRL+N')
-        self.newAction.triggered.connect(self.new)
+        self.newAction.triggered.connect(self.new_file)
 
         self.openAction = QAction('Open', self)
         self.openAction.setStatusTip('Open an existing document.')
         self.openAction.setShortcut('CTRL+O')
-        self.openAction.triggered.connect(self.open)
+        self.openAction.triggered.connect(self.open_file)
 
         file.addAction(self.newAction)
         file.addAction(self.openAction)
 
-    def new(self):
+    def new_file(self):
         new_window = TextEditor(self)
         new_window.show()
 
-    def open(self):
-        self.filename = QFileDialog.getOpenFileName(self, 'Open File', '.', '(*.txt)')
+    def open_file(self):
+        self.filename, _ = QFileDialog.getOpenFileName(self, 'Open File')
         if self.filename:
-            with open(self.filename, 'rt') as file:
+            with open(self.filename) as file:
                 self.text.setText(file.read())
 
 
