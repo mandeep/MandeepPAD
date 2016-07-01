@@ -17,9 +17,9 @@ class TextEditor(QMainWindow):
         self.move(400, 200)
 
         self.initMenuBar()
-        self.statusbar = self.statusBar()
+        self.status_bar = self.statusBar()
 
-        self.filename = ""
+        self.file_name = ""
 
     def initMenuBar(self):
         menubar = self.menuBar()
@@ -38,18 +38,31 @@ class TextEditor(QMainWindow):
         self.openAction.setShortcut('CTRL+O')
         self.openAction.triggered.connect(self.open_file)
 
+        self.saveAction = QAction('Save', self)
+        self.saveAction.setStatusTip('Save the current document.')
+        self.saveAction.setShortcut('CTRL+S')
+        self.saveAction.triggered.connect(self.save_file)
+
         file.addAction(self.newAction)
         file.addAction(self.openAction)
+        file.addAction(self.saveAction)
 
     def new_file(self):
         new_window = TextEditor(self)
         new_window.show()
 
     def open_file(self):
-        self.filename, _ = QFileDialog.getOpenFileName(self, 'Open File')
-        if self.filename:
-            with open(self.filename) as file:
+        self.file_name, _ = QFileDialog.getOpenFileName(self, 'Open File')
+        if self.file_name:
+            with open(self.file_name) as file:
                 self.text.setText(file.read())
+
+    def save_file(self):
+        if not self.file_name:
+            self.file_name, _ = QFileDialog.getSaveFileName(self, 'Save File')
+
+        with open(self.file_name, 'w') as file:
+            file.write(self.text.toPlainText())
 
 
 def main():
