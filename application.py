@@ -80,6 +80,9 @@ class TextEditor(QMainWindow):
 
     def edit_menu(self):
         """
+        Contains undo, redo, copy, cut, and paste items of the edit menu.
+        Each item is initiated via QAction and called via PyQt's text methods
+        when triggered. The addAction method sends the actions to the menu_bar().
         """
         self.undoAction = QAction('Undo', self)
         self.undoAction.setStatusTip('Undo last action.')
@@ -91,8 +94,26 @@ class TextEditor(QMainWindow):
         self.redoAction.setShortcut('CTRL+Y')
         self.redoAction.triggered.connect(self.text.redo)
 
+        self.copyAction = QAction('Copy', self)
+        self.copyAction.setStatusTip('Copy selected text.')
+        self.copyAction.setShortcut('CTRL+C')
+        self.copyAction.triggered.connect(self.text.copy)
+
+        self.cutAction = QAction('Cut', self)
+        self.cutAction.setStatusTip('Cut selected text.')
+        self.cutAction.setShortcut('CTRL+X')
+        self.cutAction.triggered.connect(self.text.cut)
+
+        self.pasteAction = QAction('Paste', self)
+        self.pasteAction.setStatusTip('Paste copied text.')
+        self.pasteAction.setShortcut('CTRL+V')
+        self.pasteAction.triggered.connect(self.text.paste)
+
         self.edit.addAction(self.undoAction)
         self.edit.addAction(self.redoAction)
+        self.edit.addAction(self.copyAction)
+        self.edit.addAction(self.cutAction)
+        self.edit.addAction(self.pasteAction)
 
     def new_file(self):
         """
