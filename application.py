@@ -1,5 +1,5 @@
 import sys
-from PyQt5.QtWidgets import *
+from PyQt5.QtWidgets import QMainWindow, QApplication, QTextEdit, QAction, QFileDialog
 
 
 class TextEditor(QMainWindow):
@@ -29,23 +29,23 @@ class TextEditor(QMainWindow):
         self.help_menu = menubar.addMenu('Help')
 
     def initFileMenu(self):
-        self.newAction = QAction('New', self)
+        self.newAction = QAction('New File', self)
         self.newAction.setStatusTip('Create a new document.')
         self.newAction.setShortcut('CTRL+N')
         self.newAction.triggered.connect(self.new_file)
 
-        self.openAction = QAction('Open', self)
+        self.openAction = QAction('Open File', self)
         self.openAction.setStatusTip('Open an existing document.')
         self.openAction.setShortcut('CTRL+O')
         self.openAction.triggered.connect(self.open_file)
 
-        self.saveAction = QAction('Save', self)
+        self.saveAction = QAction('Save File', self)
         self.saveAction.setStatusTip('Save the current document.')
         self.saveAction.setShortcut('CTRL+S')
         self.saveAction.triggered.connect(self.save_file)
 
-        self.exitAction = QAction('Exit', self)
-        self.exitAction.setStatusTip('Exit application.')
+        self.exitAction = QAction('Quit', self)
+        self.exitAction.setStatusTip('Quit application.')
         self.exitAction.setShortcut('CTRL+Q')
         self.exitAction.triggered.connect(self.exit_application)
 
