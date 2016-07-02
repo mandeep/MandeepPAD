@@ -109,11 +109,17 @@ class TextEditor(QMainWindow):
         self.pasteAction.setShortcut('CTRL+V')
         self.pasteAction.triggered.connect(self.text.paste)
 
+        self.selectAction = QAction('Select all', self)
+        self.selectAction.setStatusTip('Select all text.')
+        self.selectAction.setShortcut('CTRL+A')
+        self.selectAction.triggered.connect(self.text.selectAll)
+
         self.edit.addAction(self.undoAction)
         self.edit.addAction(self.redoAction)
         self.edit.addAction(self.copyAction)
         self.edit.addAction(self.cutAction)
         self.edit.addAction(self.pasteAction)
+        self.edit.addAction(self.selectAction)
 
     def new_file(self):
         """
