@@ -1,6 +1,6 @@
 import os
 import sys
-from PyQt5.QtWidgets import QMainWindow, QApplication, QTextEdit, QAction, QFileDialog
+from PyQt5.QtWidgets import QMainWindow, QApplication, QTextEdit, QAction, QFileDialog, QFontDialog
 from PyQt5.QtGui import QIcon
 
 
@@ -34,6 +34,7 @@ class TextEditor(QMainWindow):
         self.menu_bar()
         self.file_menu()
         self.edit_menu()
+        self.view_menu()
 
         self.file_name = None
 
@@ -46,8 +47,8 @@ class TextEditor(QMainWindow):
         menu_bar = self.menuBar()
         self.file = menu_bar.addMenu('File')
         self.edit = menu_bar.addMenu('Edit')
-        self.find = menu_bar.addMenu('Find')
         self.view = menu_bar.addMenu('View')
+        self.preferences = menu_bar.addMenu('Preferences')
         self.help_menu = menu_bar.addMenu('Help')
 
     def file_menu(self):
@@ -124,6 +125,16 @@ class TextEditor(QMainWindow):
         self.edit.addAction(self.pasteAction)
         self.edit.addAction(self.selectAction)
 
+    def view_menu(self):
+        """
+        Items that allow the user to change the design of the application.
+        """
+        self.status_barAction = QAction('Toggle status bar', self)
+        self.status_barAction.setStatusTip('Toggle the visibility of the status bar.')
+        self.status_barAction.triggered.connect(self.status_bar_visibility)
+
+        self.view.addAction(self.status_barAction)
+
     def new_file(self):
         """
         Creates a new window with an empty text area.
@@ -164,6 +175,13 @@ class TextEditor(QMainWindow):
         """
         current_file = os.path.basename(self.file_name)
         self.setWindowTitle('MandeepPAD - {}' .format(current_file))
+
+    def status_bar_visibility(self):
+        """
+        Allows the user to specify the visibility of the status bar.
+        """
+        status_bar_state = self.status_bar.isVisible()
+        self.status_bar.setVisible(not status_bar_state)
 
     def quit_application(self):
         """
