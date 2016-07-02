@@ -1,6 +1,7 @@
 import os
 import sys
 from PyQt5.QtWidgets import QMainWindow, QApplication, QTextEdit, QAction, QFileDialog
+from PyQt5.QtGui import QIcon
 
 
 class TextEditor(QMainWindow):
@@ -27,6 +28,8 @@ class TextEditor(QMainWindow):
 
         self.setGeometry(100, 100, 1024, 768)
         self.setWindowTitle('MandeepPAD')
+        self.text.setTabStopWidth(50)
+        self.setWindowIcon(QIcon('icon.png'))
 
         self.menu_bar()
         self.file_menu()
@@ -80,7 +83,7 @@ class TextEditor(QMainWindow):
 
     def edit_menu(self):
         """
-        Contains undo, redo, copy, cut, and paste items of the edit menu.
+        Contains undo, redo, copy, cut, paste, and select all items of the edit menu.
         Each item is initiated via QAction and called via PyQt's text methods
         when triggered. The addAction method sends the actions to the menu_bar().
         """
