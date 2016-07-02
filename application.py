@@ -4,33 +4,37 @@ from PyQt5.QtWidgets import QMainWindow, QApplication, QTextEdit, QAction, QFile
 
 
 class TextEditor(QMainWindow):
-
+    """
+    TextEditor class houses all of the methods needed to create the
+    text editor application. The actual text editor window is initiated
+    in the main() function which is called via entrypoint.
+    """
     def __init__(self, parent=None):
         QMainWindow.__init__(self, parent)
-        self.initUI()
+        self.init_UI()
 
-    def initUI(self):
+    def init_UI(self):
         self.text = QTextEdit(self)
         self.setCentralWidget(self.text)
 
         self.setGeometry(100, 100, 1024, 768)
         self.setWindowTitle('MandeepPAD')
 
-        self.initMenuBar()
-        self.initFileMenu()
+        self.menu_bar()
+        self.file_menu()
 
         self.file_name = None
 
         self.status_bar = self.statusBar()
 
-    def initMenuBar(self):
+    def menu_bar(self):
         menubar = self.menuBar()
         self.file = menubar.addMenu('File')
         self.edit = menubar.addMenu('Edit')
         self.preferences = menubar.addMenu('Preferences')
         self.help_menu = menubar.addMenu('Help')
 
-    def initFileMenu(self):
+    def file_menu(self):
         self.newAction = QAction('New File', self)
         self.newAction.setStatusTip('Create a new document.')
         self.newAction.setShortcut('CTRL+N')
