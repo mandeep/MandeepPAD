@@ -1,3 +1,4 @@
+import os
 import sys
 from PyQt5.QtWidgets import QMainWindow, QApplication, QTextEdit, QAction, QFileDialog
 
@@ -17,9 +18,10 @@ class TextEditor(QMainWindow):
 
         self.initMenuBar()
         self.initFileMenu()
-        self.status_bar = self.statusBar()
 
-        self.file_name = ""
+        self.file_name = None
+
+        self.status_bar = self.statusBar()
 
     def initMenuBar(self):
         menubar = self.menuBar()
@@ -60,9 +62,12 @@ class TextEditor(QMainWindow):
 
     def open_file(self):
         self.file_name, _ = QFileDialog.getOpenFileName(self, 'Open File')
+
         if self.file_name:
             with open(self.file_name) as file:
                 self.text.setText(file.read())
+            current_file = os.path.basename(self.file_name)
+            self.setWindowTitle('MandeepPAD - ' + current_file)
 
     def save_file(self):
         if not self.file_name:
