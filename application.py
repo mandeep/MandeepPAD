@@ -1,6 +1,7 @@
 import os
 import sys
-from PyQt5.QtWidgets import QMainWindow, QApplication, QTextEdit, QAction, QFileDialog, QFontDialog
+from PyQt5.QtWidgets import (QMainWindow, QApplication, QTextEdit, QAction,
+                             QFileDialog, QFontDialog, QMessageBox)
 from PyQt5.QtGui import QIcon
 
 
@@ -36,6 +37,7 @@ class TextEditor(QMainWindow):
         self.edit_menu()
         self.view_menu()
         self.preferences_menu()
+        self.help_menu()
 
         self.file_name = None
 
@@ -50,7 +52,7 @@ class TextEditor(QMainWindow):
         self.edit = menu_bar.addMenu('Edit')
         self.view = menu_bar.addMenu('View')
         self.preferences = menu_bar.addMenu('Preferences')
-        self.help_menu = menu_bar.addMenu('Help')
+        self.help_option = menu_bar.addMenu('Help')
 
     def file_menu(self):
         """
@@ -151,6 +153,15 @@ class TextEditor(QMainWindow):
 
         self.preferences.addAction(self.font_familyAction)
 
+    def help_menu(self):
+        """
+        """
+        self.aboutAction = QAction('About', self)
+        self.aboutAction.setStatusTip('About application.')
+        self.aboutAction.triggered.connect(self.about)
+
+        self.help_option.addAction(self.aboutAction)
+
     def new_file(self):
         """
         Creates a new window with an empty text area.
@@ -217,6 +228,16 @@ class TextEditor(QMainWindow):
         font, selected = QFontDialog.getFont()
         if selected:
             self.text.setFont(font)
+
+    def about(self):
+        """
+        Shows the user a popup box with details of the application.
+        """
+        message = QMessageBox()
+        message.setWindowTitle('MandeepPAD')
+        message.setText('Created by Mandeep Bhutani')
+        message.setInformativeText('July 4, 2016')
+        message.exec_()
 
     def quit_application(self):
         """
