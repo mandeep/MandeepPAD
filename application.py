@@ -155,6 +155,7 @@ class TextEditor(QMainWindow):
 
     def help_menu(self):
         """
+        Contains informative items for the user.
         """
         self.aboutAction = QAction('About', self)
         self.aboutAction.setStatusTip('About application.')
