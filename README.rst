@@ -17,7 +17,8 @@ PyPi and needs to be installed separately. Once PyQt5 is installed in the workin
 MandeepPAD can be installed by invoking the following commands::
 
     git clone https://github.com/mandeepbhutani/MandeepPAD.git
-    pip install /MandeepPAD/
+    cd MandeepPAD
+    pip install .
 
 When the package is finished installing, the following command will run the application::
 
