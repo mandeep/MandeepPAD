@@ -12,14 +12,14 @@ class TextEditor(QMainWindow):
     def __init__(self, parent=None):
         """
         QMainWindow constructs the window that contains the text area.
-        init_UI() is called here to send the application features to the window.
+        init_ui() is called here to send the application features to the window.
         """
         QMainWindow.__init__(self, parent)
-        self.init_UI()
+        self.init_ui()
 
-    def init_UI(self):
+    def init_ui(self):
         """
-        init_UI() contains all of the features of the text editor. These features are
+        Contains all of the features of the text editor. These features are
         called by QMainWindow. QTextEdit creates a text area in the main window.
         """
         self.text = QTextEdit(self)
@@ -30,6 +30,7 @@ class TextEditor(QMainWindow):
 
         self.menu_bar()
         self.file_menu()
+        self.edit_menu()
 
         self.file_name = None
 
@@ -37,17 +38,18 @@ class TextEditor(QMainWindow):
 
     def menu_bar(self):
         """
-        The menu_bar is initiated here along with each option on the menu bar.
+        The menu bar is initiated here along with each option on the menu bar.
         """
         menu_bar = self.menuBar()
         self.file = menu_bar.addMenu('File')
         self.edit = menu_bar.addMenu('Edit')
-        self.preferences = menu_bar.addMenu('Preferences')
+        self.find = menu_bar.addMenu('Find')
+        self.view = menu_bar.addMenu('View')
         self.help_menu = menu_bar.addMenu('Help')
 
     def file_menu(self):
         """
-        file_menu() contains all of the clickable items inside the file menu.
+        Contains all of the clickable items inside the file menu.
         Each item is initiated via QAction and called via their own methods
         when triggered. The addAction method sends the actions to the menu_bar().
         """
@@ -75,6 +77,22 @@ class TextEditor(QMainWindow):
         self.file.addAction(self.openAction)
         self.file.addAction(self.saveAction)
         self.file.addAction(self.exitAction)
+
+    def edit_menu(self):
+        """
+        """
+        self.undoAction = QAction('Undo', self)
+        self.undoAction.setStatusTip('Undo last action.')
+        self.undoAction.setShortcut('CTRL+Z')
+        self.undoAction.triggered.connect(self.text.undo)
+
+        self.redoAction = QAction('Redo', self)
+        self.redoAction.setStatusTip('Redo last action.')
+        self.redoAction.setShortcut('CTRL+Y')
+        self.redoAction.triggered.connect(self.text.redo)
+
+        self.edit.addAction(self.undoAction)
+        self.edit.addAction(self.redoAction)
 
     def new_file(self):
         """
@@ -115,7 +133,7 @@ class TextEditor(QMainWindow):
         the window title to include the filename.
         """
         current_file = os.path.basename(self.file_name)
-        self.setWindowTitle('MandeepPAD - ' + current_file)
+        self.setWindowTitle('MandeepPAD - {}' .format(current_file))
 
     def quit_application(self):
         """
