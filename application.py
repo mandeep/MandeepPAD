@@ -14,7 +14,6 @@ class TextEditor(QMainWindow):
 
         self.setGeometry(100, 100, 1024, 768)
         self.setWindowTitle('MandeepPAD')
-        self.move(400, 200)
 
         self.initMenuBar()
         self.status_bar = self.statusBar()
@@ -43,9 +42,15 @@ class TextEditor(QMainWindow):
         self.saveAction.setShortcut('CTRL+S')
         self.saveAction.triggered.connect(self.save_file)
 
+        self.exitAction = QAction('Exit', self)
+        self.exitAction.setStatusTip('Exit application.')
+        self.exitAction.setShortcut('CTRL+Q')
+        self.exitAction.triggered.connect(self.exit_application)
+
         file.addAction(self.newAction)
         file.addAction(self.openAction)
         file.addAction(self.saveAction)
+        file.addAction(self.exitAction)
 
     def new_file(self):
         new_window = TextEditor(self)
@@ -63,6 +68,9 @@ class TextEditor(QMainWindow):
 
         with open(self.file_name, 'w') as file:
             file.write(self.text.toPlainText())
+
+    def exit_application(self):
+        QApplication.quit()
 
 
 def main():
