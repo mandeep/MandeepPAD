@@ -16,17 +16,19 @@ class TextEditor(QMainWindow):
         self.setWindowTitle('MandeepPAD')
 
         self.initMenuBar()
+        self.initFileMenu()
         self.status_bar = self.statusBar()
 
         self.file_name = ""
 
     def initMenuBar(self):
         menubar = self.menuBar()
-        file = menubar.addMenu('File')
-        edit = menubar.addMenu('Edit')
-        preferences = menubar.addMenu('Preferences')
-        help_menu = menubar.addMenu('Help')
+        self.file = menubar.addMenu('File')
+        self.edit = menubar.addMenu('Edit')
+        self.preferences = menubar.addMenu('Preferences')
+        self.help_menu = menubar.addMenu('Help')
 
+    def initFileMenu(self):
         self.newAction = QAction('New', self)
         self.newAction.setStatusTip('Create a new document.')
         self.newAction.setShortcut('CTRL+N')
@@ -47,10 +49,10 @@ class TextEditor(QMainWindow):
         self.exitAction.setShortcut('CTRL+Q')
         self.exitAction.triggered.connect(self.exit_application)
 
-        file.addAction(self.newAction)
-        file.addAction(self.openAction)
-        file.addAction(self.saveAction)
-        file.addAction(self.exitAction)
+        self.file.addAction(self.newAction)
+        self.file.addAction(self.openAction)
+        self.file.addAction(self.saveAction)
+        self.file.addAction(self.exitAction)
 
     def new_file(self):
         new_window = TextEditor(self)
