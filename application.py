@@ -129,10 +129,15 @@ class TextEditor(QMainWindow):
         """
         Items that allow the user to change the design of the application.
         """
+        self.menu_barAction = QAction('Toggle menu bar', self)
+        self.menu_barAction.setStatusTip('Toggle the visibility of the menu bar.')
+        self.menu_barAction.triggered.connect(self.menu_bar_visibility)
+
         self.status_barAction = QAction('Toggle status bar', self)
         self.status_barAction.setStatusTip('Toggle the visibility of the status bar.')
         self.status_barAction.triggered.connect(self.status_bar_visibility)
 
+        self.view.addAction(self.menu_barAction)
         self.view.addAction(self.status_barAction)
 
     def new_file(self):
@@ -176,12 +181,23 @@ class TextEditor(QMainWindow):
         current_file = os.path.basename(self.file_name)
         self.setWindowTitle('MandeepPAD - {}' .format(current_file))
 
+    def menu_bar_visibility(self):
+        """
+        Allows the user to set the visibility of the menu bar.
+        """
+        if self.menuBar().isVisible():
+            self.menuBar().setVisible(False)
+        else:
+            self.menuBar().setVisible(True)
+
     def status_bar_visibility(self):
         """
         Allows the user to specify the visibility of the status bar.
         """
-        status_bar_state = self.status_bar.isVisible()
-        self.status_bar.setVisible(not status_bar_state)
+        if self.status_bar.isVisible():
+            self.status_bar.setVisible(False)
+        else:
+            self.status_bar.setVisible(True)
 
     def quit_application(self):
         """
