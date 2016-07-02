@@ -66,8 +66,7 @@ class TextEditor(QMainWindow):
         if self.file_name:
             with open(self.file_name) as file:
                 self.text.setText(file.read())
-            current_file = os.path.basename(self.file_name)
-            self.setWindowTitle('MandeepPAD - ' + current_file)
+            self.update_title()
 
     def save_file(self):
         if not self.file_name:
@@ -76,6 +75,11 @@ class TextEditor(QMainWindow):
         if self.file_name:
             with open(self.file_name, 'w') as file:
                 file.write(self.text.toPlainText())
+            self.update_title()
+
+    def update_title(self):
+        current_file = os.path.basename(self.file_name)
+        self.setWindowTitle('MandeepPAD - ' + current_file)
 
     def quit_application(self):
         QApplication.quit()
