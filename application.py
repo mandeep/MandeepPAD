@@ -35,6 +35,7 @@ class TextEditor(QMainWindow):
         self.file_menu()
         self.edit_menu()
         self.view_menu()
+        self.preferences_menu()
 
         self.file_name = None
 
@@ -140,6 +141,16 @@ class TextEditor(QMainWindow):
         self.view.addAction(self.menu_barAction)
         self.view.addAction(self.status_barAction)
 
+    def preferences_menu(self):
+        """
+        Contains items that allow the user to change the text area options.
+        """
+        self.font_familyAction = QAction('Font family', self)
+        self.font_familyAction.setStatusTip('Change the current font.')
+        self.font_familyAction.triggered.connect(self.change_font)
+
+        self.preferences.addAction(self.font_familyAction)
+
     def new_file(self):
         """
         Creates a new window with an empty text area.
@@ -198,6 +209,14 @@ class TextEditor(QMainWindow):
             self.status_bar.setVisible(False)
         else:
             self.status_bar.setVisible(True)
+
+    def change_font(self):
+        """
+        Allows the user to change the font family, style and size.
+        """
+        font, selected = QFontDialog.getFont()
+        if selected:
+            self.text.setFont(font)
 
     def quit_application(self):
         """
