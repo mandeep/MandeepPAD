@@ -237,7 +237,7 @@ class TextEditor(QMainWindow):
         message = QMessageBox()
         message.setWindowTitle('MandeepPAD')
         message.setText('Created by Mandeep Bhutani')
-        message.setInformativeText('July 4, 2016')
+        message.setInformativeText('GitHub: mandeepbhutani')
         message.exec_()
 
     def quit_application(self):
