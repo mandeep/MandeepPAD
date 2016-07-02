@@ -47,7 +47,7 @@ class TextEditor(QMainWindow):
         self.exitAction = QAction('Quit', self)
         self.exitAction.setStatusTip('Quit application.')
         self.exitAction.setShortcut('CTRL+Q')
-        self.exitAction.triggered.connect(self.exit_application)
+        self.exitAction.triggered.connect(self.quit_application)
 
         self.file.addAction(self.newAction)
         self.file.addAction(self.openAction)
@@ -68,10 +68,11 @@ class TextEditor(QMainWindow):
         if not self.file_name:
             self.file_name, _ = QFileDialog.getSaveFileName(self, 'Save File')
 
-        with open(self.file_name, 'w') as file:
-            file.write(self.text.toPlainText())
+        if self.file_name:
+            with open(self.file_name, 'w') as file:
+                file.write(self.text.toPlainText())
 
-    def exit_application(self):
+    def quit_application(self):
         QApplication.quit()
 
 
