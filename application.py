@@ -10,10 +10,18 @@ class TextEditor(QMainWindow):
     in the main() function which is called via entrypoint.
     """
     def __init__(self, parent=None):
+        """
+        QMainWindow constructs the window that contains the text area.
+        init_UI() is called here to send the application features to the window.
+        """
         QMainWindow.__init__(self, parent)
         self.init_UI()
 
     def init_UI(self):
+        """
+        init_UI() contains all of the features of the text editor. These features are
+        called by QMainWindow. QTextEdit creates a text area in the main window.
+        """
         self.text = QTextEdit(self)
         self.setCentralWidget(self.text)
 
@@ -28,13 +36,21 @@ class TextEditor(QMainWindow):
         self.status_bar = self.statusBar()
 
     def menu_bar(self):
-        menubar = self.menuBar()
-        self.file = menubar.addMenu('File')
-        self.edit = menubar.addMenu('Edit')
-        self.preferences = menubar.addMenu('Preferences')
-        self.help_menu = menubar.addMenu('Help')
+        """
+        The menu_bar is initiated here along with each option on the menu bar.
+        """
+        menu_bar = self.menuBar()
+        self.file = menu_bar.addMenu('File')
+        self.edit = menu_bar.addMenu('Edit')
+        self.preferences = menu_bar.addMenu('Preferences')
+        self.help_menu = menu_bar.addMenu('Help')
 
     def file_menu(self):
+        """
+        file_menu() contains all of the clickable items inside the file menu.
+        Each item is initiated via QAction and called via their own methods
+        when triggered. The addAction method sends the actions to the menu_bar().
+        """
         self.newAction = QAction('New File', self)
         self.newAction.setStatusTip('Create a new document.')
         self.newAction.setShortcut('CTRL+N')
@@ -61,10 +77,17 @@ class TextEditor(QMainWindow):
         self.file.addAction(self.exitAction)
 
     def new_file(self):
+        """
+        Creates a new window with an empty text area.
+        """
         new_window = TextEditor(self)
         new_window.show()
 
     def open_file(self):
+        """
+        Allows for the user to open any file located on their drive.
+        When a file is opened, the title is updated to include the filename.
+        """
         self.file_name, _ = QFileDialog.getOpenFileName(self, 'Open File')
 
         if self.file_name:
@@ -73,6 +96,11 @@ class TextEditor(QMainWindow):
             self.update_title()
 
     def save_file(self):
+        """
+        If the current file does not have a file name, a dialog opens and
+        allows the user to save the file to their drive. The title is
+        updated to reflect the new filename.
+        """
         if not self.file_name:
             self.file_name, _ = QFileDialog.getSaveFileName(self, 'Save File')
 
@@ -82,14 +110,24 @@ class TextEditor(QMainWindow):
             self.update_title()
 
     def update_title(self):
+        """
+        Uses os.path to retrieve the name of the current file and update
+        the window title to include the filename.
+        """
         current_file = os.path.basename(self.file_name)
         self.setWindowTitle('MandeepPAD - ' + current_file)
 
     def quit_application(self):
+        """
+        Closes the window and quits the application.
+        """
         QApplication.quit()
 
 
 def main():
+    """
+    QApplication manages the GUI that is initiated by the window variable.
+    """
     application = QApplication(sys.argv)
     window = TextEditor()
     window.show()
