@@ -2,7 +2,7 @@ import os
 import sys
 from PyQt5.QtWidgets import (QMainWindow, QApplication, QTextEdit, QAction,
                              QFileDialog, QFontDialog, QMessageBox)
-from PyQt5.QtGui import QIcon
+from PyQt5.QtGui import QIcon, QColor
 
 
 class TextEditor(QMainWindow):
@@ -60,17 +60,17 @@ class TextEditor(QMainWindow):
         Each item is initiated via QAction and called via their own methods
         when triggered. The addAction method sends the actions to the menu_bar().
         """
-        self.newAction = QAction('New File', self)
+        self.newAction = QAction('New file', self)
         self.newAction.setStatusTip('Create a new document.')
         self.newAction.setShortcut('CTRL+N')
         self.newAction.triggered.connect(self.new_file)
 
-        self.openAction = QAction('Open File', self)
+        self.openAction = QAction('Open file', self)
         self.openAction.setStatusTip('Open an existing document.')
         self.openAction.setShortcut('CTRL+O')
         self.openAction.triggered.connect(self.open_file)
 
-        self.saveAction = QAction('Save File', self)
+        self.saveAction = QAction('Save file', self)
         self.saveAction.setStatusTip('Save the current document.')
         self.saveAction.setShortcut('CTRL+S')
         self.saveAction.triggered.connect(self.save_file)
@@ -175,7 +175,7 @@ class TextEditor(QMainWindow):
         Allows for the user to open any file located on their drive.
         When a file is opened, the title is updated to include the filename.
         """
-        self.file_name, _ = QFileDialog.getOpenFileName(self, 'Open File')
+        self.file_name, _ = QFileDialog.getOpenFileName(self, 'Open file')
 
         if self.file_name:
             with open(self.file_name) as file:
@@ -189,7 +189,7 @@ class TextEditor(QMainWindow):
         updated to reflect the new filename.
         """
         if not self.file_name:
-            self.file_name, _ = QFileDialog.getSaveFileName(self, 'Save File')
+            self.file_name, _ = QFileDialog.getSaveFileName(self, 'Save file')
 
         if self.file_name:
             with open(self.file_name, 'w') as file:
