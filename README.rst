@@ -20,3 +20,10 @@ MandeepPAD can be installed by invoking the following commands::
 When the package is finished installing, the following command will run the application::
 
     MandeepPAD
+
+
+************
+Screenshot
+************
+
+.. image:: screen.png
