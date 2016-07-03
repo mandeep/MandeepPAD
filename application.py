@@ -35,8 +35,8 @@ class TextEditor(QMainWindow):
         self.menu_bar()
         self.file_menu()
         self.edit_menu()
+        self.tools_menu()
         self.view_menu()
-        self.preferences_menu()
         self.help_menu()
 
         self.file_name = None
@@ -50,8 +50,8 @@ class TextEditor(QMainWindow):
         menu_bar = self.menuBar()
         self.file = menu_bar.addMenu('File')
         self.edit = menu_bar.addMenu('Edit')
+        self.tools = menu_bar.addMenu('Tools')
         self.view = menu_bar.addMenu('View')
-        self.preferences = menu_bar.addMenu('Preferences')
         self.help_option = menu_bar.addMenu('Help')
 
     def file_menu(self):
@@ -140,6 +140,17 @@ class TextEditor(QMainWindow):
         self.status_barAction.setStatusTip('Toggle the visibility of the status bar.')
         self.status_barAction.triggered.connect(self.status_bar_visibility)
 
+        self.view.addAction(self.menu_barAction)
+        self.view.addAction(self.status_barAction)
+
+    def tools_menu(self):
+        """
+        Contains items that allow the user to enhance their text experience.
+        """
+        self.font_familyAction = QAction('Font family', self)
+        self.font_familyAction.setStatusTip('Change the current font.')
+        self.font_familyAction.triggered.connect(self.change_font)
+
         self.char_countAction = QAction('Character count', self)
         self.char_countAction.setStatusTip('View the number of characters in the selection.')
         self.char_countAction.triggered.connect(self.char_count)
@@ -148,20 +159,9 @@ class TextEditor(QMainWindow):
         self.word_countAction.setStatusTip('View the number of words in the selection.')
         self.word_countAction.triggered.connect(self.word_count)
 
-        self.view.addAction(self.menu_barAction)
-        self.view.addAction(self.status_barAction)
-        self.view.addAction(self.char_countAction)
-        self.view.addAction(self.word_countAction)
-
-    def preferences_menu(self):
-        """
-        Contains items that allow the user to change the text area options.
-        """
-        self.font_familyAction = QAction('Font family', self)
-        self.font_familyAction.setStatusTip('Change the current font.')
-        self.font_familyAction.triggered.connect(self.change_font)
-
-        self.preferences.addAction(self.font_familyAction)
+        self.tools.addAction(self.font_familyAction)
+        self.tools.addAction(self.char_countAction)
+        self.tools.addAction(self.word_countAction)
 
     def help_menu(self):
         """
