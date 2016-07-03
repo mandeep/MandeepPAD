@@ -1,8 +1,8 @@
 import os
 import sys
+from PyQt5.QtGui import QIcon
 from PyQt5.QtWidgets import (QMainWindow, QApplication, QTextEdit, QAction,
                              QFileDialog, QFontDialog, QMessageBox)
-from PyQt5.QtGui import QIcon, QTextCursor
 
 
 class TextEditor(QMainWindow):
@@ -27,7 +27,7 @@ class TextEditor(QMainWindow):
         self.text = QTextEdit(self)
         self.setCentralWidget(self.text)
 
-        self.setGeometry(100, 100, 1024, 768)
+        self.setGeometry(400, 200, 1024, 768)
         self.setWindowTitle('MandeepPAD')
         self.text.setTabStopWidth(50)
         self.setWindowIcon(QIcon('icon.png'))
