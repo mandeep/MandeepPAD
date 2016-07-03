@@ -236,7 +236,7 @@ class TextEditor(QMainWindow):
         """
         Allows the user to change the font family, style and size.
         """
-        font, selected = QFontDialog.getFont()
+        font, selected = QFontDialog.getFont(self)
         if selected:
             self.text.setFont(font)
 
