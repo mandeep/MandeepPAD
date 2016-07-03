@@ -2,7 +2,7 @@ import os
 import sys
 from PyQt5.QtWidgets import (QMainWindow, QApplication, QTextEdit, QAction,
                              QFileDialog, QFontDialog, QMessageBox)
-from PyQt5.QtGui import QIcon, QColor
+from PyQt5.QtGui import QIcon, QTextCursor
 
 
 class TextEditor(QMainWindow):
@@ -140,8 +140,18 @@ class TextEditor(QMainWindow):
         self.status_barAction.setStatusTip('Toggle the visibility of the status bar.')
         self.status_barAction.triggered.connect(self.status_bar_visibility)
 
+        self.char_countAction = QAction('Character count', self)
+        self.char_countAction.setStatusTip('View the number of characters in the selection.')
+        self.char_countAction.triggered.connect(self.char_count)
+
+        self.word_countAction = QAction('Word count', self)
+        self.word_countAction.setStatusTip('View the number of words in the selection.')
+        self.word_countAction.triggered.connect(self.word_count)
+
         self.view.addAction(self.menu_barAction)
         self.view.addAction(self.status_barAction)
+        self.view.addAction(self.char_countAction)
+        self.view.addAction(self.word_countAction)
 
     def preferences_menu(self):
         """
@@ -229,6 +239,33 @@ class TextEditor(QMainWindow):
         font, selected = QFontDialog.getFont()
         if selected:
             self.text.setFont(font)
+
+    def char_count(self):
+        """
+        Finds the length of the current selection via
+        QTextEdit().textCursor().selectedText() and returns it as a string
+        in a message box.
+        """
+        cursor = self.text.textCursor()
+        character_message = QMessageBox()
+        character_message.setWindowTitle('MandeepPAD')
+        character_message.setText('Total characters in selection:')
+        character_message.setInformativeText(str(len(cursor.selectedText())))
+        character_message.exec_()
+
+    def word_count(self):
+        """
+        Finds the number of words in the current selection. Splits into a list
+        the text in the selectedText() method of textCursor() by spaces and
+        returns the length of the list as a string in a message box.
+        """
+        cursor = self.text.textCursor()
+        word_count_message = QMessageBox()
+        word_count_message.setWindowTitle('MandeepPAD')
+        word_count_message.setText('Total words in selection:')
+        number_of_words = len(cursor.selectedText().split())
+        word_count_message.setInformativeText(str(number_of_words))
+        word_count_message.exec_()
 
     def about(self):
         """
