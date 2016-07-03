@@ -152,7 +152,7 @@ class TextEditor(QMainWindow):
         self.font_familyAction.triggered.connect(self.change_font)
 
         self.char_countAction = QAction('Character count', self)
-        self.char_countAction.setStatusTip('View the number of characters in the selection.')
+        self.char_countAction.setStatusTip('View the number of characters in the text area.')
         self.char_countAction.triggered.connect(self.char_count)
 
         self.word_countAction = QAction('Word count', self)
@@ -242,15 +242,15 @@ class TextEditor(QMainWindow):
 
     def char_count(self):
         """
-        Finds the length of the current selection via
-        QTextEdit().textCursor().selectedText() and returns it as a string
+        Finds the length of all of the text in the text area via
+        QTextEdit().textCursor().position() and returns it as a string
         in a message box.
         """
         cursor = self.text.textCursor()
         character_message = QMessageBox()
         character_message.setWindowTitle('Character count')
-        character_message.setText('Total characters in selection:')
-        character_message.setInformativeText(str(len(cursor.selectedText())))
+        character_message.setText('Total characters in text area:')
+        character_message.setInformativeText(str(cursor.position()))
         character_message.exec_()
 
     def word_count(self):
