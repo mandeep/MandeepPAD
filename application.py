@@ -248,7 +248,7 @@ class TextEditor(QMainWindow):
         """
         cursor = self.text.textCursor()
         character_message = QMessageBox()
-        character_message.setWindowTitle('MandeepPAD')
+        character_message.setWindowTitle('Character count')
         character_message.setText('Total characters in selection:')
         character_message.setInformativeText(str(len(cursor.selectedText())))
         character_message.exec_()
@@ -261,7 +261,7 @@ class TextEditor(QMainWindow):
         """
         cursor = self.text.textCursor()
         word_count_message = QMessageBox()
-        word_count_message.setWindowTitle('MandeepPAD')
+        word_count_message.setWindowTitle('Word count')
         word_count_message.setText('Total words in selection:')
         number_of_words = len(cursor.selectedText().split())
         word_count_message.setInformativeText(str(number_of_words))
