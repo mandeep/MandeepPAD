@@ -149,9 +149,15 @@ class TextEditor(QMainWindow):
         self.italicAction.setShortcut('CTRL+I')
         self.italicAction.triggered.connect(self.italicize)
 
+        self.underlineAction = QAction('Underline', self)
+        self.underlineAction.setStatusTip('Add an underline to the font.')
+        self.underlineAction.setShortcut('CTRL+U')
+        self.underlineAction.triggered.connect(self.underliner)
+
         self.form.addAction(self.font_familyAction)
         self.form.addAction(self.boldAction)
         self.form.addAction(self.italicAction)
+        self.form.addAction(self.underlineAction)
 
     def view_menu(self):
         """
@@ -277,6 +283,15 @@ class TextEditor(QMainWindow):
             self.text.setFontItalic(True)
         else:
             self.text.setFontItalic(False)
+
+    def underliner(self):
+        """
+        Adds an underline to the text that is to be written in the text area.
+        """
+        if not self.text.fontUnderline():
+            self.text.setFontUnderline(True)
+        else:
+            self.text.setFontUnderline(False)
 
     def char_count(self):
         """
