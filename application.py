@@ -1,6 +1,6 @@
 import os
 import sys
-from PyQt5.QtGui import QIcon, QFont
+from PyQt5.QtGui import QIcon
 from PyQt5.QtWidgets import (QMainWindow, QApplication, QTextEdit, QAction,
                              QFileDialog, QFontDialog, QMessageBox)
 
@@ -135,6 +135,10 @@ class TextEditor(QMainWindow):
         """
         Contains items that allow the user to change the format of the text.
         """
+        self.font_familyAction = QAction('Font family', self)
+        self.font_familyAction.setStatusTip('Change the current font.')
+        self.font_familyAction.triggered.connect(self.change_font)
+
         self.boldAction = QAction('Bold', self)
         self.boldAction.setStatusTip('Change the font weight to bold.')
         self.boldAction.setShortcut('CTRL+B')
@@ -145,6 +149,7 @@ class TextEditor(QMainWindow):
         self.italicAction.setShortcut('CTRL+I')
         self.italicAction.triggered.connect(self.italicize)
 
+        self.form.addAction(self.font_familyAction)
         self.form.addAction(self.boldAction)
         self.form.addAction(self.italicAction)
 
@@ -167,10 +172,6 @@ class TextEditor(QMainWindow):
         """
         Contains items that allow the user to enhance their text experience.
         """
-        self.font_familyAction = QAction('Font family', self)
-        self.font_familyAction.setStatusTip('Change the current font.')
-        self.font_familyAction.triggered.connect(self.change_font)
-
         self.char_countAction = QAction('Character count', self)
         self.char_countAction.setStatusTip('View the number of characters in the text area.')
         self.char_countAction.triggered.connect(self.char_count)
@@ -179,7 +180,6 @@ class TextEditor(QMainWindow):
         self.word_countAction.setStatusTip('View the number of words in the selection.')
         self.word_countAction.triggered.connect(self.word_count)
 
-        self.tools.addAction(self.font_familyAction)
         self.tools.addAction(self.char_countAction)
         self.tools.addAction(self.word_countAction)
 
