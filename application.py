@@ -137,6 +137,7 @@ class TextEditor(QMainWindow):
         """
         self.font_familyAction = QAction('Font family', self)
         self.font_familyAction.setStatusTip('Change the current font.')
+        self.font_familyAction.setShortcut('CTRL+F')
         self.font_familyAction.triggered.connect(self.change_font)
 
         self.boldAction = QAction('Bold', self)
