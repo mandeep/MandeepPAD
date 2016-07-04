@@ -2,7 +2,7 @@ import os
 import sys
 from PyQt5.QtGui import QIcon
 from PyQt5.QtWidgets import (QMainWindow, QApplication, QTextEdit, QAction,
-                             QFileDialog, QFontDialog, QMessageBox)
+                             QFileDialog, QFontDialog, QMessageBox, QInputDialog)
 
 
 class TextEditor(QMainWindow):
@@ -135,9 +135,8 @@ class TextEditor(QMainWindow):
         """
         Contains items that allow the user to change the format of the text.
         """
-        self.font_familyAction = QAction('Font family', self)
+        self.font_familyAction = QAction('Font', self)
         self.font_familyAction.setStatusTip('Change the current font.')
-        self.font_familyAction.setShortcut('CTRL+F')
         self.font_familyAction.triggered.connect(self.change_font)
 
         self.boldAction = QAction('Bold', self)
@@ -179,6 +178,11 @@ class TextEditor(QMainWindow):
         """
         Contains items that allow the user to enhance their text experience.
         """
+        self.findAction = QAction('Find text', self)
+        self.findAction.setStatusTip('Find text within the text area.')
+        self.findAction.setShortcut('CTRL+F')
+        self.findAction.triggered.connect(self.text_search)
+
         self.char_countAction = QAction('Character count', self)
         self.char_countAction.setStatusTip('View the number of characters in the text area.')
         self.char_countAction.triggered.connect(self.char_count)
@@ -187,6 +191,7 @@ class TextEditor(QMainWindow):
         self.word_countAction.setStatusTip('View the number of words in the selection.')
         self.word_countAction.triggered.connect(self.word_count)
 
+        self.tools.addAction(self.findAction)
         self.tools.addAction(self.char_countAction)
         self.tools.addAction(self.word_countAction)
 
@@ -293,6 +298,16 @@ class TextEditor(QMainWindow):
             self.text.setFontUnderline(True)
         else:
             self.text.setFontUnderline(False)
+
+    def text_search(self):
+        """"""
+        find_text, ok = QInputDialog.getText(self, 'Find text', 'Enter text to find:')
+
+        if ok and not self.text.textCursor().hasSelection():
+            self.text.moveCursor(1)
+            self.text.find(find_text)
+        else:
+            self.text.find(find_text)
 
     def char_count(self):
         """
