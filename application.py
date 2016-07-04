@@ -300,7 +300,12 @@ class TextEditor(QMainWindow):
             self.text.setFontUnderline(False)
 
     def text_search(self):
-        """"""
+        """
+        Searches the document for the text given by the user from the input
+        dialog. If there is no current selection, the cursor is moved to the
+        beginning of the document before starting the search. If there is a
+        current selection, the search returns text located after the selected text.
+        """
         find_text, ok = QInputDialog.getText(self, 'Find text', 'Enter text to find:')
 
         if ok and not self.text.textCursor().hasSelection():
