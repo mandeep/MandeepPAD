@@ -1,6 +1,6 @@
 import os
 import sys
-from PyQt5.QtGui import QIcon
+from PyQt5.QtGui import QIcon, QFont
 from PyQt5.QtWidgets import (QMainWindow, QApplication, QTextEdit, QAction,
                              QFileDialog, QFontDialog, QMessageBox)
 
@@ -14,15 +14,16 @@ class TextEditor(QMainWindow):
     def __init__(self, parent=None):
         """
         QMainWindow constructs the window that contains the text area.
-        init_ui() is called here to send the application features to the window.
+        init_ui() is called here to send the application's UI
+        elements to the main window.
         """
         QMainWindow.__init__(self, parent)
         self.init_ui()
 
     def init_ui(self):
         """
-        Contains all of the features of the text editor. These features are
-        called by QMainWindow. QTextEdit creates a text area in the main window.
+        Contains all of the UI elements of the text editor. These elements are
+        sent to QMainWindow. QTextEdit creates a text area in the main window.
         """
         self.text = QTextEdit(self)
         self.setCentralWidget(self.text)
@@ -35,6 +36,7 @@ class TextEditor(QMainWindow):
         self.menu_bar()
         self.file_menu()
         self.edit_menu()
+        self.format_menu()
         self.tools_menu()
         self.view_menu()
         self.help_menu()
@@ -50,6 +52,7 @@ class TextEditor(QMainWindow):
         menu_bar = self.menuBar()
         self.file = menu_bar.addMenu('File')
         self.edit = menu_bar.addMenu('Edit')
+        self.form = menu_bar.addMenu('Format')
         self.tools = menu_bar.addMenu('Tools')
         self.view = menu_bar.addMenu('View')
         self.help_option = menu_bar.addMenu('Help')
@@ -127,6 +130,23 @@ class TextEditor(QMainWindow):
         self.edit.addAction(self.cutAction)
         self.edit.addAction(self.pasteAction)
         self.edit.addAction(self.selectAction)
+
+    def format_menu(self):
+        """
+        Contains items that allow the user to change the format of the text.
+        """
+        self.boldAction = QAction('Bold', self)
+        self.boldAction.setStatusTip('Change the font weight to bold.')
+        self.boldAction.setShortcut('CTRL+B')
+        self.boldAction.triggered.connect(self.bolden)
+
+        self.italicAction = QAction('Italic', self)
+        self.italicAction.setStatusTip('Change the font style to italic.')
+        self.italicAction.setShortcut('CTRL+I')
+        self.italicAction.triggered.connect(self.italicize)
+
+        self.form.addAction(self.boldAction)
+        self.form.addAction(self.italicAction)
 
     def view_menu(self):
         """
@@ -239,6 +259,24 @@ class TextEditor(QMainWindow):
         font, selected = QFontDialog.getFont(self)
         if selected:
             self.text.setFont(font)
+
+    def bolden(self):
+        """
+        Boldens the text that is to be written in the text area.
+        """
+        if self.text.fontWeight() == 50:
+            self.text.setFontWeight(75)
+        else:
+            self.text.setFontWeight(50)
+
+    def italicize(self):
+        """
+        Italicizes the text that is to be written in the text area.
+        """
+        if not self.text.fontItalic():
+            self.text.setFontItalic(True)
+        else:
+            self.text.setFontItalic(False)
 
     def char_count(self):
         """
