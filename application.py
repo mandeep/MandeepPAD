@@ -329,11 +329,14 @@ class TextEditor(QMainWindow):
 
     def word_count(self):
         """
-        Finds the number of words in the current selection. Splits into a list
-        the text in the selectedText() method of textCursor() by spaces and
-        returns the length of the list as a string in a message box.
+        Finds the number of words in the text area with use of the
+        textCursor() method of QTextEdit. The entire text in the document
+        is automatically selected. Next the text is split into a list by
+        using spaces as a separator. The length of the list is returned
+        as a string in a message box.
         """
         cursor = self.text.textCursor()
+        cursor.select(3)
         word_count_message = QMessageBox()
         word_count_message.setWindowTitle('Word count')
         word_count_message.setText('Total words in selection:')
@@ -368,3 +371,4 @@ def main():
     sys.exit(application.exec_())
 
 main()
+ 
