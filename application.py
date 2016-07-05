@@ -86,6 +86,7 @@ class TextEditor(QMainWindow):
         self.file.addAction(self.newAction)
         self.file.addAction(self.openAction)
         self.file.addAction(self.saveAction)
+        self.file.addSeparator()
         self.file.addAction(self.exitAction)
 
     def edit_menu(self):
@@ -119,6 +120,10 @@ class TextEditor(QMainWindow):
         self.pasteAction.setShortcut('CTRL+V')
         self.pasteAction.triggered.connect(self.text.paste)
 
+        self.deleteAction = QAction('Delete', self)
+        self.deleteAction.setStatusTip('Delete selected text.')
+        self.deleteAction.triggered.connect(self.delete_text)
+
         self.selectAction = QAction('Select all', self)
         self.selectAction.setStatusTip('Select all text.')
         self.selectAction.setShortcut('CTRL+A')
@@ -126,9 +131,12 @@ class TextEditor(QMainWindow):
 
         self.edit.addAction(self.undoAction)
         self.edit.addAction(self.redoAction)
+        self.edit.addSeparator()
         self.edit.addAction(self.copyAction)
         self.edit.addAction(self.cutAction)
         self.edit.addAction(self.pasteAction)
+        self.edit.addAction(self.deleteAction)
+        self.edit.addSeparator()
         self.edit.addAction(self.selectAction)
 
     def format_menu(self):
@@ -155,6 +163,7 @@ class TextEditor(QMainWindow):
         self.underlineAction.triggered.connect(self.underliner)
 
         self.form.addAction(self.font_familyAction)
+        self.form.addSeparator()
         self.form.addAction(self.boldAction)
         self.form.addAction(self.italicAction)
         self.form.addAction(self.underlineAction)
@@ -192,6 +201,7 @@ class TextEditor(QMainWindow):
         self.word_countAction.triggered.connect(self.word_count)
 
         self.tools.addAction(self.findAction)
+        self.tools.addSeparator()
         self.tools.addAction(self.char_countAction)
         self.tools.addAction(self.word_countAction)
 
@@ -246,27 +256,17 @@ class TextEditor(QMainWindow):
         current_file = os.path.basename(self.file_name)
         self.setWindowTitle('MandeepPAD - {}' .format(current_file))
 
-    def menu_bar_visibility(self):
+    def delete_text(self):
         """
-        Allows the user to set the visibility of the menu bar.
+        Deletes the text in the current selection.
         """
-        if self.menuBar().isVisible():
-            self.menuBar().setVisible(False)
-        else:
-            self.menuBar().setVisible(True)
-
-    def status_bar_visibility(self):
-        """
-        Allows the user to specify the visibility of the status bar.
-        """
-        if self.status_bar.isVisible():
-            self.status_bar.setVisible(False)
-        else:
-            self.status_bar.setVisible(True)
+        cursor = self.text.textCursor()
+        cursor.removeSelectedText()
 
     def change_font(self):
         """
-        Allows the user to change the font family, style and size.
+        Opens a font dialog that allows the user to change the font family,
+        style and size.
         """
         font, selected = QFontDialog.getFont(self)
         if selected:
@@ -323,7 +323,7 @@ class TextEditor(QMainWindow):
         cursor = self.text.textCursor()
         character_message = QMessageBox()
         character_message.setWindowTitle('Character count')
-        character_message.setText('Total characters in text area:')
+        character_message.setText('Total characters in document:')
         character_message.setInformativeText(str(cursor.position()))
         character_message.exec_()
 
@@ -339,10 +339,28 @@ class TextEditor(QMainWindow):
         cursor.select(3)
         word_count_message = QMessageBox()
         word_count_message.setWindowTitle('Word count')
-        word_count_message.setText('Total words in selection:')
+        word_count_message.setText('Total words in document:')
         number_of_words = len(cursor.selectedText().split())
         word_count_message.setInformativeText(str(number_of_words))
         word_count_message.exec_()
+
+    def menu_bar_visibility(self):
+        """
+        Allows the user to set the visibility of the menu bar.
+        """
+        if self.menuBar().isVisible():
+            self.menuBar().setVisible(False)
+        else:
+            self.menuBar().setVisible(True)
+
+    def status_bar_visibility(self):
+        """
+        Allows the user to specify the visibility of the status bar.
+        """
+        if self.status_bar.isVisible():
+            self.status_bar.setVisible(False)
+        else:
+            self.status_bar.setVisible(True)
 
     def about(self):
         """
@@ -371,4 +389,3 @@ def main():
     sys.exit(application.exec_())
 
 main()
- 
