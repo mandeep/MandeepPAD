@@ -1,6 +1,7 @@
 import os
 import sys
 from PyQt5.QtGui import QIcon
+from PyQt5.QtPrintSupport import QPrintDialog
 from PyQt5.QtWidgets import (QMainWindow, QApplication, QTextEdit, QAction,
                              QFileDialog, QFontDialog, QMessageBox, QInputDialog)
 
@@ -78,6 +79,11 @@ class TextEditor(QMainWindow):
         self.saveAction.setShortcut('CTRL+S')
         self.saveAction.triggered.connect(self.save_file)
 
+        self.printAction = QAction('Print', self)
+        self.printAction.setStatusTip('Print the current document.')
+        self.printAction.setShortcut('CTRL+P')
+        self.printAction.triggered.connect(self.print_file)
+
         self.exitAction = QAction('Quit', self)
         self.exitAction.setStatusTip('Quit application.')
         self.exitAction.setShortcut('CTRL+Q')
@@ -86,6 +92,8 @@ class TextEditor(QMainWindow):
         self.file.addAction(self.newAction)
         self.file.addAction(self.openAction)
         self.file.addAction(self.saveAction)
+        self.file.addSeparator()
+        self.file.addAction(self.printAction)
         self.file.addSeparator()
         self.file.addAction(self.exitAction)
 
@@ -248,6 +256,15 @@ class TextEditor(QMainWindow):
                 file.write(self.text.toPlainText())
             self.update_title()
 
+    def print_file(self):
+        """
+        Opens print dialog that allows the user to change the print settings
+        as well as print the document.
+        """
+        print_dialog = QPrintDialog()
+        print_dialog.printer()
+        print_dialog.exec_()
+
     def update_title(self):
         """
         Uses os.path to retrieve the name of the current file and update
@@ -387,5 +404,3 @@ def main():
     window = TextEditor()
     window.show()
     sys.exit(application.exec_())
-
-main()
