@@ -1,8 +1,9 @@
 language: python
 python:
-  - "3.5"
+  - "3.5.2"
 notifications:
   email: false
+sudo: required
 before_install:
   - pip install coveralls
 install:
