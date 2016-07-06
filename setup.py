@@ -10,6 +10,6 @@ setup(name='MandeepPAD',
       ],
       entry_points='''
         [console_scripts]
-        MandeepPAD=application:main
+        MandeepPAD==mpad:main
         ''',
       )
