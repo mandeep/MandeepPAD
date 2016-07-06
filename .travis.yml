@@ -10,7 +10,6 @@ install:
   - pip install coverage
   - pip install pytest
   - pip install pytest-qt
-  - pip install pytest-xvfb
   - pip install pytest-faulthandler
   - pip install pyqt5
 before_script:
