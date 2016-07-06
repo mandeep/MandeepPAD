@@ -13,9 +13,9 @@ install:
   - pip install pytest-faulthandler
   - pip install pyqt5
 before_script:
-  - export DISPLAY=:99.0
-  - sh -e /etc/init.d/xvfb start
-  - sleep 5
+  - "export DISPLAY=:99.0"
+  - "sh -e /etc/init.d/xvfb start"
+  - sleep 3
 script:
   - py.test -s
   - coverage run test_mpad.py
