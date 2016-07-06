@@ -5,7 +5,6 @@ notifications:
   email: false
 sudo: required
 before_install:
-  - sudo apt-get update
   - sudo apt-get install xvfb
   - pip install coveralls
 install:
