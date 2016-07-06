@@ -9,6 +9,8 @@ install:
   - python setup.py install
   - pip install coverage
   - pip install pytest
+  - pip install pytest-qt
+  - pip install pytest-cov
   - pip install pyqt5
 script:
   - py.test
