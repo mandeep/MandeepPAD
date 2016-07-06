@@ -13,7 +13,7 @@ install:
   - pip install pytest-cov
   - pip install pyqt5
 script:
-  - py.test
+  - py.test -s
   - coverage run test_mpad.py
 after_success:
   - coveralls
