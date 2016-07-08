@@ -14,9 +14,7 @@ app = QApplication(sys.argv)
 class TestClass:
 
     def setup(self):
-
         self.window = mpad.TextEditor()
-        self.window.show()
 
     def test_window_name(self):
         assert self.window.windowTitle() == 'MandeepPAD'
