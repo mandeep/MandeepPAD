@@ -1,8 +1,8 @@
 language: python
 python:
   - "3.5.2"
-dist:
-  - trusty
+sudo: required
+dist: trusty
 notifications:
   email: false
 sudo: required
