@@ -1,6 +1,8 @@
 language: python
 python:
   - "3.5.2"
+dist:
+  - trusty
 notifications:
   email: false
 sudo: required
@@ -13,7 +15,7 @@ install:
   - pip install pytest-qt
   - pip install pytest-faulthandler
   - sudo apt-get update
-  - sudo apt-get install python3-pyqt5, pyqt5-dev-tools, xvfb
+  - sudo apt-get install xvfb python3-pyqt5
 before_script:
   - export DISPLAY=:99.0
   - sh -e /etc/init.d/xvfb start
