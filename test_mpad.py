@@ -14,10 +14,11 @@ class TestClass:
     def setup(self):
         self.application = QApplication(sys.argv)
         self.window = mpad.TextEditor()
-    """
+        self.window.show()
+
     def test_window_name(self):
         assert self.window.windowTitle() == 'MandeepPAD'
-    """
+
     def test_geometry(self):
         assert self.window.height() == 768
         assert self.window.width() == 1024
