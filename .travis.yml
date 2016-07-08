@@ -3,6 +3,8 @@ python:
   - "3.5.2"
 sudo: required
 dist: trusty
+virtualenv:
+  system_site_packages: true
 notifications:
   email: false
 sudo: required
