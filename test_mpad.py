@@ -8,11 +8,13 @@ from PyQt5.QtPrintSupport import QPrintDialog
 from PyQt5.QtWidgets import (QMainWindow, QApplication, QTextEdit, QAction,
                              QFileDialog, QFontDialog, QMessageBox, QInputDialog)
 
+app = QApplication(sys.argv)
+
 
 class TestClass:
 
     def setup(self):
-        self.application = QApplication(sys.argv)
+
         self.window = mpad.TextEditor()
         self.window.show()
 
