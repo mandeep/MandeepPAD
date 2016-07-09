@@ -23,6 +23,7 @@ class TestClass:
     def test_geometry(self):
         assert self.editor.height() == 768
         assert self.editor.width() == 1024
+        assert self.editor.geometry() is not None
 
     def test_bars(self):
         """
