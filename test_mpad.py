@@ -14,19 +14,23 @@ app = QApplication(sys.argv)
 class TestClass:
 
     def test_window_name(self):
-        assert mpad.TextEditor().windowTitle() == 'MandeepPAD'
-    """
+        assert self.editor.windowTitle() == 'MandeepPAD'
+
     def test_geometry(self):
         assert self.editor.height() == 768
         assert self.editor.width() == 1024
 
     def test_bars(self):
-
+        """
+        Tests whether the widget contains a status bar and menu bar.
+        """
         assert self.editor.statusBar()
         assert self.editor.menuBar()
 
     def test_menu_bar(self):
-
+        """
+        Tests whether the menu items appear on the menu bar.
+        """
         assert self.editor.file
         assert self.editor.edit
         assert self.editor.form
@@ -37,4 +41,3 @@ class TestClass:
     def test_file_name(self):
 
         assert self.editor.file_name is None
-    """
