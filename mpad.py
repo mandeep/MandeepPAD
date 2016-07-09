@@ -393,7 +393,7 @@ class TextEditor(QMainWindow):
         """
         Closes the window and quits the application.
         """
-        QApplication.quit()
+        sys.exit()
 
 
 def main():
