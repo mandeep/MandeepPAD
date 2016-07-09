@@ -41,3 +41,7 @@ class TestClass:
         assert self.editor.tools
         assert self.editor.view
         assert self.editor.help_option
+
+    def test_file_name(self):
+
+        assert self.editor.file_name is None
