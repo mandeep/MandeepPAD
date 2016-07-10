@@ -200,6 +200,11 @@ class TextEditor(QMainWindow):
         self.findAction.setShortcut('CTRL+F')
         self.findAction.triggered.connect(self.text_search)
 
+        self.findNextAction = QAction('Find next', self)
+        self.findNextAction.setStatusTip('Find the next occurrence of the selected text.')
+        self.findNextAction.setShortcut('F3')
+        self.findNextAction.triggered.connect(self.find_next_text)
+
         self.char_countAction = QAction('Character count', self)
         self.char_countAction.setStatusTip('View the number of characters in the text area.')
         self.char_countAction.triggered.connect(self.char_count)
@@ -209,6 +214,7 @@ class TextEditor(QMainWindow):
         self.word_countAction.triggered.connect(self.word_count)
 
         self.tools.addAction(self.findAction)
+        self.tools.addAction(self.findNextAction)
         self.tools.addSeparator()
         self.tools.addAction(self.char_countAction)
         self.tools.addAction(self.word_countAction)
@@ -331,6 +337,15 @@ class TextEditor(QMainWindow):
         else:
             self.text.find(find_text)
 
+    def find_next_text(self):
+        """
+        Finds the next occurrence of the selected text. Can be used with the
+        'Find text' dialog or as a standalone action.
+        """
+        if self.text.textCursor().hasSelection():
+            selected_text = self.text.textCursor().selectedText()
+            self.text.find(selected_text)
+
     def char_count(self):
         """
         Finds the length of all of the text in the text area via
@@ -393,7 +408,7 @@ class TextEditor(QMainWindow):
         """
         Closes the window and quits the application.
         """
-        sys.exit()
+        QApplication.quit()
 
 
 def main():
