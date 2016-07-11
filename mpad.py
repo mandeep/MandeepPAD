@@ -34,7 +34,7 @@ class TextEditor(QMainWindow):
         self.text.setTabStopWidth(50)
         self.setWindowIcon(QIcon('icon.png'))
 
-        self.menu_bar()
+        self.menu_bar_item()
         self.file_menu()
         self.edit_menu()
         self.format_menu()
@@ -46,7 +46,7 @@ class TextEditor(QMainWindow):
 
         self.status_bar = self.statusBar()
 
-    def menu_bar(self):
+    def menu_bar_item(self):
         """
         The menu bar is initiated here along with each option on the menu bar.
         """
@@ -64,38 +64,38 @@ class TextEditor(QMainWindow):
         Each item is initiated via QAction and called via their own methods
         when triggered. The addAction method sends the actions to the menu_bar().
         """
-        self.newAction = QAction('New file', self)
-        self.newAction.setStatusTip('Create a new document.')
-        self.newAction.setShortcut('CTRL+N')
-        self.newAction.triggered.connect(self.new_file)
+        self.new_action = QAction('New file', self)
+        self.new_action.setStatusTip('Create a new document.')
+        self.new_action.setShortcut('CTRL+N')
+        self.new_action.triggered.connect(self.new_file)
 
-        self.openAction = QAction('Open file', self)
-        self.openAction.setStatusTip('Open an existing document.')
-        self.openAction.setShortcut('CTRL+O')
-        self.openAction.triggered.connect(self.open_file)
+        self.open_action = QAction('Open file', self)
+        self.open_action.setStatusTip('Open an existing document.')
+        self.open_action.setShortcut('CTRL+O')
+        self.open_action.triggered.connect(self.open_file)
 
-        self.saveAction = QAction('Save file', self)
-        self.saveAction.setStatusTip('Save the current document.')
-        self.saveAction.setShortcut('CTRL+S')
-        self.saveAction.triggered.connect(self.save_file)
+        self.save_action = QAction('Save file', self)
+        self.save_action.setStatusTip('Save the current document.')
+        self.save_action.setShortcut('CTRL+S')
+        self.save_action.triggered.connect(self.save_file)
 
-        self.printAction = QAction('Print', self)
-        self.printAction.setStatusTip('Print the current document.')
-        self.printAction.setShortcut('CTRL+P')
-        self.printAction.triggered.connect(self.print_file)
+        self.print_action = QAction('Print', self)
+        self.print_action.setStatusTip('Print the current document.')
+        self.print_action.setShortcut('CTRL+P')
+        self.print_action.triggered.connect(self.print_file)
 
-        self.exitAction = QAction('Quit', self)
-        self.exitAction.setStatusTip('Quit application.')
-        self.exitAction.setShortcut('CTRL+Q')
-        self.exitAction.triggered.connect(self.quit_application)
+        self.exit_action = QAction('Quit', self)
+        self.exit_action.setStatusTip('Quit application.')
+        self.exit_action.setShortcut('CTRL+Q')
+        self.exit_action.triggered.connect(self.quit_application)
 
-        self.file.addAction(self.newAction)
-        self.file.addAction(self.openAction)
-        self.file.addAction(self.saveAction)
+        self.file.addAction(self.new_action)
+        self.file.addAction(self.open_action)
+        self.file.addAction(self.save_action)
         self.file.addSeparator()
-        self.file.addAction(self.printAction)
+        self.file.addAction(self.print_action)
         self.file.addSeparator()
-        self.file.addAction(self.exitAction)
+        self.file.addAction(self.exit_action)
 
     def edit_menu(self):
         """
@@ -103,131 +103,131 @@ class TextEditor(QMainWindow):
         Each item is initiated via QAction and called via PyQt's text methods
         when triggered. The addAction method sends the actions to the menu_bar().
         """
-        self.undoAction = QAction('Undo', self)
-        self.undoAction.setStatusTip('Undo last action.')
-        self.undoAction.setShortcut('CTRL+Z')
-        self.undoAction.triggered.connect(self.text.undo)
+        self.undo_action = QAction('Undo', self)
+        self.undo_action.setStatusTip('Undo last action.')
+        self.undo_action.setShortcut('CTRL+Z')
+        self.undo_action.triggered.connect(self.text.undo)
 
-        self.redoAction = QAction('Redo', self)
-        self.redoAction.setStatusTip('Redo last action.')
-        self.redoAction.setShortcut('CTRL+Y')
-        self.redoAction.triggered.connect(self.text.redo)
+        self.redo_action = QAction('Redo', self)
+        self.redo_action.setStatusTip('Redo last action.')
+        self.redo_action.setShortcut('CTRL+Y')
+        self.redo_action.triggered.connect(self.text.redo)
 
-        self.copyAction = QAction('Copy', self)
-        self.copyAction.setStatusTip('Copy selected text.')
-        self.copyAction.setShortcut('CTRL+C')
-        self.copyAction.triggered.connect(self.text.copy)
+        self.copy_action = QAction('Copy', self)
+        self.copy_action.setStatusTip('Copy selected text.')
+        self.copy_action.setShortcut('CTRL+C')
+        self.copy_action.triggered.connect(self.text.copy)
 
-        self.cutAction = QAction('Cut', self)
-        self.cutAction.setStatusTip('Cut selected text.')
-        self.cutAction.setShortcut('CTRL+X')
-        self.cutAction.triggered.connect(self.text.cut)
+        self.cut_action = QAction('Cut', self)
+        self.cut_action.setStatusTip('Cut selected text.')
+        self.cut_action.setShortcut('CTRL+X')
+        self.cut_action.triggered.connect(self.text.cut)
 
-        self.pasteAction = QAction('Paste', self)
-        self.pasteAction.setStatusTip('Paste copied text.')
-        self.pasteAction.setShortcut('CTRL+V')
-        self.pasteAction.triggered.connect(self.text.paste)
+        self.paste_action = QAction('Paste', self)
+        self.paste_action.setStatusTip('Paste copied text.')
+        self.paste_action.setShortcut('CTRL+V')
+        self.paste_action.triggered.connect(self.text.paste)
 
-        self.deleteAction = QAction('Delete', self)
-        self.deleteAction.setStatusTip('Delete selected text.')
-        self.deleteAction.triggered.connect(self.delete_text)
+        self.delete_action = QAction('Delete', self)
+        self.delete_action.setStatusTip('Delete selected text.')
+        self.delete_action.triggered.connect(self.delete_text)
 
-        self.selectAction = QAction('Select all', self)
-        self.selectAction.setStatusTip('Select all text.')
-        self.selectAction.setShortcut('CTRL+A')
-        self.selectAction.triggered.connect(self.text.selectAll)
+        self.select_action = QAction('Select all', self)
+        self.select_action.setStatusTip('Select all text.')
+        self.select_action.setShortcut('CTRL+A')
+        self.select_action.triggered.connect(self.text.selectAll)
 
-        self.edit.addAction(self.undoAction)
-        self.edit.addAction(self.redoAction)
+        self.edit.addAction(self.undo_action)
+        self.edit.addAction(self.redo_action)
         self.edit.addSeparator()
-        self.edit.addAction(self.copyAction)
-        self.edit.addAction(self.cutAction)
-        self.edit.addAction(self.pasteAction)
-        self.edit.addAction(self.deleteAction)
+        self.edit.addAction(self.copy_action)
+        self.edit.addAction(self.cut_action)
+        self.edit.addAction(self.paste_action)
+        self.edit.addAction(self.delete_action)
         self.edit.addSeparator()
-        self.edit.addAction(self.selectAction)
+        self.edit.addAction(self.select_action)
 
     def format_menu(self):
         """
         Contains items that allow the user to change the format of the text.
         """
-        self.font_familyAction = QAction('Font', self)
-        self.font_familyAction.setStatusTip('Change the current font.')
-        self.font_familyAction.triggered.connect(self.change_font)
+        self.font_family_action = QAction('Font', self)
+        self.font_family_action.setStatusTip('Change the current font.')
+        self.font_family_action.triggered.connect(self.change_font)
 
-        self.boldAction = QAction('Bold', self)
-        self.boldAction.setStatusTip('Change the font weight to bold.')
-        self.boldAction.setShortcut('CTRL+B')
-        self.boldAction.triggered.connect(self.bolden)
+        self.bold_action = QAction('Bold', self)
+        self.bold_action.setStatusTip('Change the font weight to bold.')
+        self.bold_action.setShortcut('CTRL+B')
+        self.bold_action.triggered.connect(self.bolden)
 
-        self.italicAction = QAction('Italic', self)
-        self.italicAction.setStatusTip('Change the font style to italic.')
-        self.italicAction.setShortcut('CTRL+I')
-        self.italicAction.triggered.connect(self.italicize)
+        self.italic_action = QAction('Italic', self)
+        self.italic_action.setStatusTip('Change the font style to italic.')
+        self.italic_action.setShortcut('CTRL+I')
+        self.italic_action.triggered.connect(self.italicize)
 
-        self.underlineAction = QAction('Underline', self)
-        self.underlineAction.setStatusTip('Add an underline to the font.')
-        self.underlineAction.setShortcut('CTRL+U')
-        self.underlineAction.triggered.connect(self.underliner)
+        self.underline_action = QAction('Underline', self)
+        self.underline_action.setStatusTip('Add an underline to the font.')
+        self.underline_action.setShortcut('CTRL+U')
+        self.underline_action.triggered.connect(self.underliner)
 
-        self.form.addAction(self.font_familyAction)
+        self.form.addAction(self.font_family_action)
         self.form.addSeparator()
-        self.form.addAction(self.boldAction)
-        self.form.addAction(self.italicAction)
-        self.form.addAction(self.underlineAction)
+        self.form.addAction(self.bold_action)
+        self.form.addAction(self.italic_action)
+        self.form.addAction(self.underline_action)
 
     def view_menu(self):
         """
         Items that allow the user to change the design of the application.
         """
-        self.menu_barAction = QAction('Toggle menu bar', self)
-        self.menu_barAction.setStatusTip('Toggle the visibility of the menu bar.')
-        self.menu_barAction.triggered.connect(self.menu_bar_visibility)
+        self.menu_bar_action = QAction('Toggle menu bar', self)
+        self.menu_bar_action.setStatusTip('Toggle the visibility of the menu bar.')
+        self.menu_bar_action.triggered.connect(self.menu_bar_visibility)
 
-        self.status_barAction = QAction('Toggle status bar', self)
-        self.status_barAction.setStatusTip('Toggle the visibility of the status bar.')
-        self.status_barAction.triggered.connect(self.status_bar_visibility)
+        self.status_bar_action = QAction('Toggle status bar', self)
+        self.status_bar_action.setStatusTip('Toggle the visibility of the status bar.')
+        self.status_bar_action.triggered.connect(self.status_bar_visibility)
 
-        self.view.addAction(self.menu_barAction)
-        self.view.addAction(self.status_barAction)
+        self.view.addAction(self.menu_bar_action)
+        self.view.addAction(self.status_bar_action)
 
     def tools_menu(self):
         """
         Contains items that allow the user to enhance their text experience.
         """
-        self.findAction = QAction('Find text', self)
-        self.findAction.setStatusTip('Find text within the text area.')
-        self.findAction.setShortcut('CTRL+F')
-        self.findAction.triggered.connect(self.text_search)
+        self.find_action = QAction('Find text', self)
+        self.find_action.setStatusTip('Find text within the text area.')
+        self.find_action.setShortcut('CTRL+F')
+        self.find_action.triggered.connect(self.text_search)
 
-        self.findNextAction = QAction('Find next', self)
-        self.findNextAction.setStatusTip('Find the next occurrence of the selected text.')
-        self.findNextAction.setShortcut('F3')
-        self.findNextAction.triggered.connect(self.find_next_text)
+        self.find_next_action = QAction('Find next', self)
+        self.find_next_action.setStatusTip('Find the next occurrence of the selected text.')
+        self.find_next_action.setShortcut('F3')
+        self.find_next_action.triggered.connect(self.find_next_text)
 
-        self.char_countAction = QAction('Character count', self)
-        self.char_countAction.setStatusTip('View the number of characters in the text area.')
-        self.char_countAction.triggered.connect(self.char_count)
+        self.char_count_action = QAction('Character count', self)
+        self.char_count_action.setStatusTip('View the number of characters in the text area.')
+        self.char_count_action.triggered.connect(self.char_count)
 
-        self.word_countAction = QAction('Word count', self)
-        self.word_countAction.setStatusTip('View the number of words in the selection.')
-        self.word_countAction.triggered.connect(self.word_count)
+        self.word_count_action = QAction('Word count', self)
+        self.word_count_action.setStatusTip('View the number of words in the selection.')
+        self.word_count_action.triggered.connect(self.word_count)
 
-        self.tools.addAction(self.findAction)
-        self.tools.addAction(self.findNextAction)
+        self.tools.addAction(self.find_action)
+        self.tools.addAction(self.find_next_action)
         self.tools.addSeparator()
-        self.tools.addAction(self.char_countAction)
-        self.tools.addAction(self.word_countAction)
+        self.tools.addAction(self.char_count_action)
+        self.tools.addAction(self.word_count_action)
 
     def help_menu(self):
         """
         Contains informative items for the user.
         """
-        self.aboutAction = QAction('About', self)
-        self.aboutAction.setStatusTip('About application.')
-        self.aboutAction.triggered.connect(self.about)
+        self.about_action = QAction('About', self)
+        self.about_action.setStatusTip('About application.')
+        self.about_action.triggered.connect(self.about)
 
-        self.help_option.addAction(self.aboutAction)
+        self.help_option.addAction(self.about_action)
 
     def new_file(self):
         """
