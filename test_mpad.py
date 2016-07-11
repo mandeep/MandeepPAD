@@ -21,9 +21,11 @@ class TestClass:
         assert self.editor.windowTitle() == 'MandeepPAD'
 
     def test_geometry(self):
+        coordinates = ['1024', '768']
         assert self.editor.height() == 768
         assert self.editor.width() == 1024
-        assert self.editor.geometry() is not None
+        for coordinate in coordinates:
+            assert coordinate in str(self.editor.geometry())
 
     def test_bars(self):
         """
