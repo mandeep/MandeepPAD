@@ -50,13 +50,13 @@ class TextEditor(QMainWindow):
         """
         The menu bar is initiated here along with each option on the menu bar.
         """
-        menu_bar = self.menuBar()
-        self.file = menu_bar.addMenu('File')
-        self.edit = menu_bar.addMenu('Edit')
-        self.form = menu_bar.addMenu('Format')
-        self.tools = menu_bar.addMenu('Tools')
-        self.view = menu_bar.addMenu('View')
-        self.help_option = menu_bar.addMenu('Help')
+        self.menu_bar = self.menuBar()
+        self.file = self.menu_bar.addMenu('File')
+        self.edit = self.menu_bar.addMenu('Edit')
+        self.form = self.menu_bar.addMenu('Format')
+        self.tools = self.menu_bar.addMenu('Tools')
+        self.view = self.menu_bar.addMenu('View')
+        self.help_option = self.menu_bar.addMenu('Help')
 
     def file_menu(self):
         """
@@ -380,10 +380,10 @@ class TextEditor(QMainWindow):
         """
         Allows the user to set the visibility of the menu bar.
         """
-        if self.menuBar().isVisible():
-            self.menuBar().setVisible(False)
+        if self.menu_bar.isVisible():
+            self.menu_bar.setVisible(False)
         else:
-            self.menuBar().setVisible(True)
+            self.menu_bar.setVisible(True)
 
     def status_bar_visibility(self):
         """
