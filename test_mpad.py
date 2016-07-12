@@ -21,11 +21,8 @@ class TestClass:
         assert self.editor.windowTitle() == 'MandeepPAD'
 
     def test_geometry(self):
-        coordinates = ['1024', '768']
         assert self.editor.height() == 768
         assert self.editor.width() == 1024
-        for coordinate in coordinates:
-            assert coordinate in str(self.editor.geometry())
 
     def test_bars(self):
         """
@@ -45,6 +42,14 @@ class TestClass:
         assert self.editor.view
         assert self.editor.help_option
 
-    def test_file_name(self):
-
-        assert self.editor.file_name is None
+    def test_menu_items(self, qtbot):
+        """
+        Qtbot simulates mouse clicks inside the text editor window to ensure
+        that the items on the menu bar are clickable.
+        """
+        qtbot.mouseClick(self.editor.file, Qt.LeftButton)
+        qtbot.mouseClick(self.editor.edit, Qt.LeftButton)
+        qtbot.mouseClick(self.editor.form, Qt.LeftButton)
+        qtbot.mouseClick(self.editor.tools, Qt.LeftButton)
+        qtbot.mouseClick(self.editor.view, Qt.LeftButton)
+        qtbot.mouseClick(self.editor.help_option, Qt.LeftButton)
