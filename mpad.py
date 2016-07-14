@@ -385,8 +385,9 @@ class TextEditor(QMainWindow):
 
     def insert_date(self):
         """
-        Inserts the current date and time in the format of
-        YYYY-MM-DD HH:mm:ss. Example: 2016-07-14 15:39:01.
+        Inserts the current date and time in the format of YYYY-MM-DD HH:mm:ss.
+        Example: 2016-07-14 15:39:01. The time zone retrieved defaults to
+        the current user's time zone.
         """
         cursor = self.text.textCursor()
         time = arrow.now().format('YYYY-MM-DD HH:mm:ss')
