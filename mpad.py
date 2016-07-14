@@ -390,7 +390,7 @@ class TextEditor(QMainWindow):
         the current user's time zone.
         """
         cursor = self.text.textCursor()
-        time = arrow.now().format('YYYY-MM-DD HH:mm:ss')
+        time = arrow.now().format('YYYY-MM-DD HH:mm:ss ')
         cursor.insertText(time)
 
     def menu_bar_visibility(self):
