@@ -1,5 +1,6 @@
 import os
 import sys
+import arrow
 from PyQt5.QtGui import QIcon
 from PyQt5.QtPrintSupport import QPrintDialog
 from PyQt5.QtWidgets import (QMainWindow, QApplication, QTextEdit, QAction,
@@ -213,8 +214,14 @@ class TextEditor(QMainWindow):
         self.word_count_action.setStatusTip('View the number of words in the selection.')
         self.word_count_action.triggered.connect(self.word_count)
 
+        self.date_action = QAction('Insert date/time', self)
+        self.date_action.setStatusTip('Add a date and time to the document.')
+        self.date_action.triggered.connect(self.insert_date)
+
         self.tools.addAction(self.find_action)
         self.tools.addAction(self.find_next_action)
+        self.tools.addSeparator()
+        self.tools.addAction(self.date_action)
         self.tools.addSeparator()
         self.tools.addAction(self.char_count_action)
         self.tools.addAction(self.word_count_action)
@@ -375,6 +382,15 @@ class TextEditor(QMainWindow):
         number_of_words = len(cursor.selectedText().split())
         word_count_message.setInformativeText(str(number_of_words))
         word_count_message.exec_()
+
+    def insert_date(self):
+        """
+        Inserts the current date and time in the format of
+        YYYY-MM-DD HH:mm:ss. Example: 2016-07-14 15:39:01.
+        """
+        cursor = self.text.textCursor()
+        time = arrow.now().format('YYYY-MM-DD HH:mm:ss')
+        cursor.insertText(time)
 
     def menu_bar_visibility(self):
         """
