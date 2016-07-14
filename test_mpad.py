@@ -18,6 +18,7 @@ class TestClass:
         self.editor.show()
 
     def test_window_name(self):
+        self.editor.setWindowTitle('MandeepPAD')
         assert self.editor.windowTitle() == 'MandeepPAD'
 
     def test_geometry(self):
