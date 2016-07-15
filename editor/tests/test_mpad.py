@@ -24,6 +24,13 @@ class TestClass:
         assert self.editor.height() == 768
         assert self.editor.width() == 1024
 
+    def test_text_area(self):
+        sentence = 'They gave my red hat to the donkey.'
+        cursor = self.editor.text.textCursor()
+        cursor.insertText(sentence)
+        cursor.select(3)
+        assert cursor.selectedText() == sentence
+
     def test_bars(self):
         """
         Tests whether the widget contains a status bar and menu bar.
