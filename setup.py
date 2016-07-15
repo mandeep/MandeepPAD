@@ -7,13 +7,13 @@ else:
     dependencies = ['arrow']
 
 setup(name='MandeepPAD',
-      version='0.0.1',
+      version='0.0.6',
       author='Mandeep Bhutani',
       packages=find_packages(),
       include_package_data=True,
       install_requires=dependencies,
       entry_points='''
         [console_scripts]
-        MandeepPAD=mpad:main
+        MandeepPAD=editor.mpad:main
         ''',
       )
