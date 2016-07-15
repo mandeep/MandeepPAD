@@ -23,9 +23,10 @@ before_script:
 script:
   - cd editor/tests
   - py.test -s -v
-  - coverage run test_mpad.py
+
+  - coverage run test_mpad.py --omit=*/python3.4_with_system_site_packages/*
   - cd -
   - cd editor
-  - coverage run mpad.py
+  - coverage run mpad.py --omit=*/python3.4_with_system_site_packages/*
 after_success:
   - coveralls
