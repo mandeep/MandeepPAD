@@ -7,12 +7,12 @@ notifications:
   email: false
 sudo: required
 before_install:
-  - pip install coveralls
   - sudo apt-get update
   - sudo apt-get install -y xvfb python3-pyqt5
 install:
   - python setup.py install
   - pip install coverage
+  - pip install coveralls
   - pip install pytest
   - pip install pytest-qt
   - pip install pytest-faulthandler
@@ -24,5 +24,8 @@ script:
   - cd editor/tests
   - py.test -s -v
   - coverage run test_mpad.py
+  - cd -
+  - cd editor
+  - coverage run mpad.py
 after_success:
   - coveralls
