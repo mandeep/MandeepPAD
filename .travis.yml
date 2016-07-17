@@ -26,3 +26,4 @@ script:
   - coverage run test_mpad.py
 after_success:
   - coveralls -b /editor/
+  - coveralls debug
