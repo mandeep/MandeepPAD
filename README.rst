@@ -16,9 +16,7 @@ at the ripe old age of 12.
 Installation
 ************
 
-The text editor is dependent on the PyQt5 library. Unfortunately, PyQt5 cannot be installed via
-PyPi and needs to be installed separately. Once PyQt5 is installed in the working environment,
-MandeepPAD can be installed by invoking the following commands::
+The text editor is dependent on the PyQt5 library. If the user's system Python is 3.5 or greater, setup.py will attempt to install PyQt5, otherwise the user is responsible for installing the PyQt5 package. Once PyQt5 is installed in the working environment, MandeepPAD can be installed by invoking the following commands::
 
     git clone https://github.com/mandeepbhutani/MandeepPAD.git
     cd MandeepPAD
