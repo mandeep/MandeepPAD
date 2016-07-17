@@ -23,6 +23,6 @@ before_script:
 script:
   - cd editor/tests
   - py.test -s -v
-  - coverage run test_mpad.py --source=/editor/tests --omit=*/home/*
+  - coverage run test_mpad.py
 after_success:
-  - coveralls
+  - coveralls --base_dir /editor/
