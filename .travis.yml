@@ -25,4 +25,4 @@ script:
   - py.test -s -v
   - coverage run test_mpad.py
 after_success:
-  - coveralls --base_dir /editor/
+  - coveralls -b /editor/
