@@ -197,7 +197,7 @@ class TextEditor(QMainWindow):
         Contains items that allow the user to enhance their text experience.
         """
         self.find_action = QAction('Find text', self)
-        self.find_action.setStatusTip('Find text within the text area.')
+        self.find_action.setStatusTip('Find text within the document.')
         self.find_action.setShortcut('CTRL+F')
         self.find_action.triggered.connect(self.text_search)
 
@@ -207,7 +207,7 @@ class TextEditor(QMainWindow):
         self.find_next_action.triggered.connect(self.find_next_text)
 
         self.char_count_action = QAction('Character count', self)
-        self.char_count_action.setStatusTip('View the number of characters in the text area.')
+        self.char_count_action.setStatusTip('View the number of characters in the document.')
         self.char_count_action.triggered.connect(self.char_count)
 
         self.word_count_action = QAction('Word count', self)
@@ -304,7 +304,7 @@ class TextEditor(QMainWindow):
 
     def bolden(self):
         """
-        Boldens the text that is to be written in the text area.
+        Boldens the text that is to be written in the document.
         """
         if self.text.fontWeight() == 50:
             self.text.setFontWeight(75)
@@ -313,7 +313,7 @@ class TextEditor(QMainWindow):
 
     def italicize(self):
         """
-        Italicizes the text that is to be written in the text area.
+        Italicizes the text that is to be written in the document.
         """
         if not self.text.fontItalic():
             self.text.setFontItalic(True)
@@ -322,7 +322,7 @@ class TextEditor(QMainWindow):
 
     def underliner(self):
         """
-        Adds an underline to the text that is to be written in the text area.
+        Adds an underline to the text that is to be written in the document.
         """
         if not self.text.fontUnderline():
             self.text.setFontUnderline(True)
@@ -355,7 +355,7 @@ class TextEditor(QMainWindow):
 
     def char_count(self):
         """
-        Finds the length of all of the text in the text area via
+        Finds the length of all of the text in the document via
         QTextEdit().textCursor().position() and returns it as a string
         in a message box.
         """
@@ -368,7 +368,7 @@ class TextEditor(QMainWindow):
 
     def word_count(self):
         """
-        Finds the number of words in the text area with use of the
+        Finds the number of words in the document with use of the
         textCursor() method of QTextEdit. The entire text in the document
         is automatically selected. Next the text is split into a list by
         using spaces as a separator. The length of the list is returned
