@@ -255,8 +255,8 @@ class TextEditor(QMainWindow):
         self.addToolBar(Qt.TopToolBarArea, self.toolbar)
         self.toolbar.setMovable(False)
 
-        new_document = QAction(QIcon().fromTheme('document-new'), 'New document', self)
-        new_document.triggered.connect(self.new_file)
+        new_window = QAction(QIcon().fromTheme('window-new'), 'New window', self)
+        new_window.triggered.connect(self.new_file)
 
         open_document = QAction(QIcon().fromTheme('document-open'), 'Open document', self)
         open_document.triggered.connect(self.open_file)
@@ -278,8 +278,11 @@ class TextEditor(QMainWindow):
 
         find_in_text = QAction(QIcon().fromTheme('edit-find'), 'Find text', self)
         find_in_text.triggered.connect(self.text_search)
+        
+        self.toggle_menu_bar = QAction(QIcon().fromTheme('document-revert'), 'Show menu bar', self)
+        self.toggle_menu_bar.triggered.connect(self.menu_bar_visibility)
 
-        self.toolbar.addAction(new_document)
+        self.toolbar.addAction(new_window)
         self.toolbar.addAction(open_document)
         self.toolbar.addAction(save_document)
         self.toolbar.addAction(copy_text)
@@ -448,12 +451,16 @@ class TextEditor(QMainWindow):
 
     def menu_bar_visibility(self):
         """
-        Allows the user to set the visibility of the menu bar.
+        Allows the user to set the visibility of the menu bar. When the menu
+        bar is toggled off, an icon is placed on the tool bar to allow the user
+        to show the menu bar again.
         """
         if self.menu_bar.isVisible():
             self.menu_bar.setVisible(False)
+            self.toolbar.addAction(self.toggle_menu_bar)
         else:
             self.menu_bar.setVisible(True)
+            self.toolbar.removeAction(self.toggle_menu_bar)
 
     def status_bar_visibility(self):
         """
