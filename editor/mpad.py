@@ -1,10 +1,11 @@
 import os
 import sys
 import arrow
+from PyQt5.QtCore import Qt
 from PyQt5.QtGui import QIcon
 from PyQt5.QtPrintSupport import QPrintDialog
 from PyQt5.QtWidgets import (QMainWindow, QApplication, QTextEdit, QAction,
-                             QFileDialog, QFontDialog, QMessageBox, QInputDialog)
+                             QFileDialog, QFontDialog, QMessageBox, QInputDialog, QToolBar)
 
 
 class TextEditor(QMainWindow):
@@ -46,6 +47,7 @@ class TextEditor(QMainWindow):
         self.file_name = None
 
         self.status_bar = self.statusBar()
+        self.tool_bar()
 
     def menu_bar_item(self):
         """
@@ -189,7 +191,12 @@ class TextEditor(QMainWindow):
         self.status_bar_action.setStatusTip('Toggle the visibility of the status bar.')
         self.status_bar_action.triggered.connect(self.status_bar_visibility)
 
+        self.tool_bar_action = QAction('Toggle tool bar', self)
+        self.tool_bar_action.setStatusTip('Toggle the visibility of the tool bar.')
+        self.tool_bar_action.triggered.connect(self.tool_bar_visibility)
+
         self.view.addAction(self.menu_bar_action)
+        self.view.addAction(self.tool_bar_action)
         self.view.addAction(self.status_bar_action)
 
     def tools_menu(self):
@@ -235,6 +242,49 @@ class TextEditor(QMainWindow):
         self.about_action.triggered.connect(self.about)
 
         self.help_option.addAction(self.about_action)
+
+    def tool_bar(self):
+        """
+        Creates a toolbar underneath the menu bar with common items such as new
+        document, open document, save document, etc.
+        """
+        self.toolbar = QToolBar()
+        self.addToolBar(Qt.TopToolBarArea, self.toolbar)
+        self.toolbar.setMovable(False)
+
+        new_document = QAction(QIcon().fromTheme('document-new'), 'New document', self)
+        new_document.triggered.connect(self.new_file)
+
+        open_document = QAction(QIcon().fromTheme('document-open'), 'Open document', self)
+        open_document.triggered.connect(self.open_file)
+
+        save_document = QAction(QIcon().fromTheme('document-save'), 'Save document', self)
+        save_document.triggered.connect(self.save_file)
+
+        copy_text = QAction(QIcon().fromTheme('edit-copy'), 'Copy text', self)
+        copy_text.triggered.connect(self.text.copy)
+
+        cut_text = QAction(QIcon().fromTheme('edit-cut'), 'Cut text', self)
+        cut_text.triggered.connect(self.text.cut)
+
+        paste_text = QAction(QIcon().fromTheme('edit-paste'), 'Paste text', self)
+        paste_text.triggered.connect(self.text.paste)
+
+        select_all = QAction(QIcon().fromTheme('edit-select-all'), 'Select all', self)
+        select_all.triggered.connect(self.text.selectAll)
+
+        find_in_text = QAction(QIcon().fromTheme('edit-find'), 'Find text', self)
+        find_in_text.triggered.connect(self.text_search)
+
+        self.toolbar.addAction(new_document)
+        self.toolbar.addAction(open_document)
+        self.toolbar.addAction(save_document)
+        self.toolbar.addAction(copy_text)
+        self.toolbar.addAction(cut_text)
+        self.toolbar.addAction(paste_text)
+        self.toolbar.addAction(select_all)
+        self.toolbar.addAction(find_in_text)
+
 
     def new_file(self):
         """
@@ -410,6 +460,15 @@ class TextEditor(QMainWindow):
             self.status_bar.setVisible(False)
         else:
             self.status_bar.setVisible(True)
+
+    def tool_bar_visibility(self):
+        """
+        Allows the user to specify the visibility of the tool bar.
+        """
+        if self.toolbar.isVisible():
+            self.toolbar.hide()
+        else:
+            self.toolbar.show()
 
     def about(self):
         """
