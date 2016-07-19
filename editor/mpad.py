@@ -5,7 +5,8 @@ from PyQt5.QtCore import Qt
 from PyQt5.QtGui import QIcon
 from PyQt5.QtPrintSupport import QPrintDialog
 from PyQt5.QtWidgets import (QMainWindow, QApplication, QTextEdit, QAction,
-                             QFileDialog, QFontDialog, QMessageBox, QInputDialog, QToolBar)
+                             QFileDialog, QFontDialog, QMessageBox,
+                             QInputDialog, QToolBar)
 
 
 class TextEditor(QMainWindow):
@@ -65,7 +66,8 @@ class TextEditor(QMainWindow):
         """
         Contains all of the clickable items inside the file menu.
         Each item is initiated via QAction and called via their own methods
-        when triggered. The addAction method sends the actions to the menu_bar().
+        when triggered. The addAction method sends the actions to the
+        menu_bar().
         """
         self.new_action = QAction('New file', self)
         self.new_action.setStatusTip('Create a new document.')
@@ -102,9 +104,10 @@ class TextEditor(QMainWindow):
 
     def edit_menu(self):
         """
-        Contains undo, redo, copy, cut, paste, and select all items of the edit menu.
-        Each item is initiated via QAction and called via PyQt's text methods
-        when triggered. The addAction method sends the actions to the menu_bar().
+        Contains undo, redo, copy, cut, paste, and select all items of the
+        edit menu. Each item is initiated via QAction and called via PyQt's
+        text methods when triggered. The addAction method sends the actions
+        to the menu_bar().
         """
         self.undo_action = QAction('Undo', self)
         self.undo_action.setStatusTip('Undo last action.')
@@ -383,7 +386,8 @@ class TextEditor(QMainWindow):
         Searches the document for the text given by the user from the input
         dialog. If there is no current selection, the cursor is moved to the
         beginning of the document before starting the search. If there is a
-        current selection, the search returns text located after the selected text.
+        current selection, the search returns text located after the
+        selected text.
         """
         find_text, ok = QInputDialog.getText(self, 'Find text', 'Enter text to find:')
 
