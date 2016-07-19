@@ -37,6 +37,9 @@ class TextEditor(QMainWindow):
         self.text.setTabStopWidth(50)
         self.setWindowIcon(QIcon('icon.png'))
 
+        self.status_bar = self.statusBar()
+        self.tool_bar()
+        
         self.menu_bar_item()
         self.file_menu()
         self.edit_menu()
@@ -46,9 +49,6 @@ class TextEditor(QMainWindow):
         self.help_menu()
 
         self.file_name = None
-
-        self.status_bar = self.statusBar()
-        self.tool_bar()
 
     def menu_bar_item(self):
         """
@@ -186,6 +186,7 @@ class TextEditor(QMainWindow):
         """
         Items that allow the user to change the design of the application.
         """
+
         self.menu_bar_action = QAction('Toggle menu bar', self)
         self.menu_bar_action.setStatusTip('Toggle the visibility of the menu bar.')
         self.menu_bar_action.triggered.connect(self.menu_bar_visibility)
