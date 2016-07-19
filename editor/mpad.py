@@ -187,16 +187,16 @@ class TextEditor(QMainWindow):
         Items that allow the user to change the design of the application.
         """
 
-        self.menu_bar_action = QAction('Toggle menu bar', self)
-        self.menu_bar_action.setStatusTip('Toggle the visibility of the menu bar.')
+        self.menu_bar_action = QAction('Hide menu bar', self)
+        self.menu_bar_action.setStatusTip('Hide the menu bar.')
         self.menu_bar_action.triggered.connect(self.menu_bar_visibility)
 
-        self.status_bar_action = QAction('Toggle status bar', self)
-        self.status_bar_action.setStatusTip('Toggle the visibility of the status bar.')
+        self.status_bar_action = QAction('Hide status bar', self)
+        self.status_bar_action.setStatusTip('Hide the status bar.')
         self.status_bar_action.triggered.connect(self.status_bar_visibility)
 
-        self.tool_bar_action = QAction('Toggle tool bar', self)
-        self.tool_bar_action.setStatusTip('Toggle the visibility of the tool bar.')
+        self.tool_bar_action = QAction('Hide tool bar', self)
+        self.tool_bar_action.setStatusTip('Hide the tool bar.')
         self.tool_bar_action.triggered.connect(self.tool_bar_visibility)
 
         self.view.addAction(self.menu_bar_action)
@@ -469,8 +469,10 @@ class TextEditor(QMainWindow):
         """
         if self.status_bar.isVisible():
             self.status_bar.setVisible(False)
+            self.status_bar_action.setText('Show status bar')
         else:
             self.status_bar.setVisible(True)
+            self.status_bar_action.setText('Hide status bar')
 
     def tool_bar_visibility(self):
         """
@@ -478,8 +480,12 @@ class TextEditor(QMainWindow):
         """
         if self.toolbar.isVisible():
             self.toolbar.hide()
+            self.tool_bar_action.setText('Show tool bar')
+            self.tool_bar_action.setStatusTip('Show the tool bar.')
         else:
             self.toolbar.show()
+            self.tool_bar_action.setText('Hide tool bar')
+            self.tool_bar_action.setStatusTip('Hide the tool bar.')
 
     def about(self):
         """
