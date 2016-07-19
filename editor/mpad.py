@@ -285,7 +285,6 @@ class TextEditor(QMainWindow):
         self.toolbar.addAction(select_all)
         self.toolbar.addAction(find_in_text)
 
-
     def new_file(self):
         """
         Creates a new window with an empty text area.
