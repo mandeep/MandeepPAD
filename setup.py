@@ -1,17 +1,11 @@
-import sys
 from setuptools import setup, find_packages
-
-if sys.version_info >= (3, 5):
-    dependencies = ['pyqt5', 'arrow']
-else:
-    dependencies = ['arrow']
 
 setup(name='MandeepPAD',
       version='0.0.6',
       author='Mandeep Bhutani',
       packages=find_packages(),
       include_package_data=True,
-      install_requires=dependencies,
+      install_requires=['arrow'],
       entry_points='''
         [console_scripts]
         MandeepPAD=editor.mpad:main
