@@ -9,5 +9,5 @@ setup(name='MandeepPAD',
       entry_points='''
         [console_scripts]
         MandeepPAD=mpad.editor:main
-        ''',
+        '''
       )
