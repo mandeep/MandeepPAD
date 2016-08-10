@@ -1,12 +1,12 @@
-import os
-import sys
-from editor import mpad
-import pytest
+from mpad import editor
 from PyQt5.QtCore import Qt
 from PyQt5.QtGui import QIcon
 from PyQt5.QtPrintSupport import QPrintDialog
 from PyQt5.QtWidgets import (QMainWindow, QApplication, QTextEdit, QAction,
                              QFileDialog, QFontDialog, QMessageBox, QInputDialog)
+import pytest
+import os
+import sys
 
 app = QApplication(sys.argv)
 
@@ -14,7 +14,7 @@ app = QApplication(sys.argv)
 class TestClass:
 
     def setup(self):
-        self.editor = mpad.TextEditor()
+        self.editor = editor.TextEditor()
         self.editor.show()
 
     def test_window_name(self):
