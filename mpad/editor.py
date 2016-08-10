@@ -1,4 +1,5 @@
 import os
+import pkg_resources
 import sys
 import arrow
 from PyQt5.QtCore import Qt
@@ -35,7 +36,8 @@ class TextEditor(QMainWindow):
         self.setGeometry(400, 200, 1024, 768)
         self.setWindowTitle('MandeepPAD')
         self.text.setTabStopWidth(50)
-        self.setWindowIcon(QIcon('icon.png'))
+        window_icon = pkg_resources.resource_filename('mpad.images', 'icon.png')
+        self.setWindowIcon(QIcon(window_icon))
 
         self.status_bar = self.statusBar()
         self.tool_bar()
@@ -256,28 +258,36 @@ class TextEditor(QMainWindow):
         self.addToolBar(Qt.TopToolBarArea, self.toolbar)
         self.toolbar.setMovable(False)
 
-        new_window = QAction(QIcon().fromTheme('window-new'), 'New window', self)
+        new_window_icon = pkg_resources.resource_filename('mpad.images', 'document_icon.png')
+        new_window = QAction(QIcon(new_window_icon), 'New window', self)
         new_window.triggered.connect(self.new_file)
 
-        open_document = QAction(QIcon().fromTheme('document-open'), 'Open document', self)
+        open_document_icon = pkg_resources.resource_filename('mpad.images', 'doc_import_icon.png')
+        open_document = QAction(QIcon(open_document_icon), 'Open document', self)
         open_document.triggered.connect(self.open_file)
 
-        save_document = QAction(QIcon().fromTheme('document-save'), 'Save document', self)
+        save_document_icon = pkg_resources.resource_filename('mpad.images', 'save_icon.png')
+        save_document = QAction(QIcon(save_document_icon), 'Save document', self)
         save_document.triggered.connect(self.save_file)
 
-        copy_text = QAction(QIcon().fromTheme('edit-copy'), 'Copy text', self)
+        copy_text_icon = pkg_resources.resource_filename('mpad.images', 'clipboard_copy_icon.png')
+        copy_text = QAction(QIcon(copy_text_icon), 'Copy text', self)
         copy_text.triggered.connect(self.text.copy)
 
-        cut_text = QAction(QIcon().fromTheme('edit-cut'), 'Cut text', self)
+        cut_text_icon = pkg_resources.resource_filename('mpad.images', 'clipboard_cut_icon.png')
+        cut_text = QAction(QIcon(cut_text_icon), 'Cut text', self)
         cut_text.triggered.connect(self.text.cut)
 
-        paste_text = QAction(QIcon().fromTheme('edit-paste'), 'Paste text', self)
+        paste_text_icon = pkg_resources.resource_filename('mpad.images', 'clipboard_paste_icon.png')
+        paste_text = QAction(QIcon(paste_text_icon), 'Paste text', self)
         paste_text.triggered.connect(self.text.paste)
 
-        select_all = QAction(QIcon().fromTheme('edit-select-all'), 'Select all', self)
+        select_all_icon = pkg_resources.resource_filename('mpad.images', 'doc_lines_icon.png')
+        select_all = QAction(QIcon(select_all_icon), 'Select all', self)
         select_all.triggered.connect(self.text.selectAll)
 
-        find_in_text = QAction(QIcon().fromTheme('edit-find'), 'Find text', self)
+        find_icon = pkg_resources.resource_filename('mpad.images', 'find_icon.png')
+        find_in_text = QAction(QIcon(find_icon), 'Find text', self)
         find_in_text.triggered.connect(self.text_search)
         
         self.toggle_menu_bar = QAction(QIcon().fromTheme('document-revert'), 'Show menu bar', self)
@@ -493,6 +503,8 @@ class TextEditor(QMainWindow):
         """
         message = QMessageBox()
         message.setWindowTitle('MandeepPAD')
+        message_icon = pkg_resources.resource_filename('mpad.images', 'md_help.png')
+        message.setWindowIcon(QIcon(message_icon))
         message.setText('Created by Mandeep Bhutani')
         message.setInformativeText('GitHub: mandeepbhutani')
         message.exec_()
