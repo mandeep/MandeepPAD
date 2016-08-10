@@ -8,6 +8,6 @@ setup(name='MandeepPAD',
       install_requires=['arrow'],
       entry_points='''
         [console_scripts]
-        MandeepPAD=editor.mpad:main
+        MandeepPAD=mpad.editor:main
         ''',
       )
