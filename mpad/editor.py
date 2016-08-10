@@ -1,13 +1,13 @@
+import arrow
 import os
 import pkg_resources
-import sys
-import arrow
 from PyQt5.QtCore import Qt
 from PyQt5.QtGui import QIcon
 from PyQt5.QtPrintSupport import QPrintDialog
 from PyQt5.QtWidgets import (QMainWindow, QApplication, QTextEdit, QAction,
                              QFileDialog, QFontDialog, QMessageBox,
                              QInputDialog, QToolBar)
+import sys
 
 
 class TextEditor(QMainWindow):
