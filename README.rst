@@ -10,7 +10,7 @@ at the ripe old age of 12.
 |travis| |coverage|
 -------------------
 
-.. image:: editor/screen.png
+.. image:: mpad/images/screen.png
 
 ************
 Installation
