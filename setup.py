@@ -1,10 +1,10 @@
-from setuptools import setup, find_packages
+from setuptools import setup
 
 setup(name='MandeepPAD',
-      version='0.0.6',
+      version='0.9',
       author='Mandeep Bhutani',
-      packages=find_packages(),
-      include_package_data=True,
+      packages=['mpad', 'mpad.images'],
+      package_data={'mpad.images': '*.png'},
       install_requires=['arrow'],
       entry_points='''
         [console_scripts]
