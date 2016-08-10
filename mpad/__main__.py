@@ -1,3 +1,3 @@
-from editor.mpad import main
+from mpad.editor import main
 
 main()
