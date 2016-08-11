@@ -21,8 +21,7 @@ before_script:
   - sh -e /etc/init.d/xvfb start
   - sleep 3
 script:
-  - cd mpad/tests
   - py.test -s -v
-  - coverage run test_mpad.py
+  - coverage run --source=mpad mpad/tests/test_mpad.py
 after_success:
   - coveralls
