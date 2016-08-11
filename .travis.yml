@@ -22,6 +22,6 @@ before_script:
   - sleep 3
 script:
   - py.test -s -v
-  - coverage run --source=mpad mpad/tests/test_mpad.py
+  - coverage run --source=mpad -m py.test
 after_success:
   - coveralls
