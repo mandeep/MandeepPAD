@@ -1,11 +1,8 @@
 from mpad import editor
 from PyQt5.QtCore import Qt
-from PyQt5.QtGui import QIcon
 from PyQt5.QtPrintSupport import QPrintDialog
 from PyQt5.QtWidgets import (QMainWindow, QApplication, QTextEdit, QAction,
                              QFileDialog, QFontDialog, QMessageBox, QInputDialog)
-import pytest
-import os
 import sys
 
 app = QApplication(sys.argv)
@@ -17,12 +14,13 @@ class TestClass:
         self.editor = editor.TextEditor()
         self.editor.show()
 
-    def test_window_name(self):
+    def test_window(self):
         assert self.editor.windowTitle() == 'MandeepPAD'
+        assert self.editor.windowIcon().isNull() is False
 
     def test_geometry(self):
-        assert self.editor.height() == 768
         assert self.editor.width() == 1024
+        assert self.editor.height() == 768
 
     def test_text_area(self):
         sentence = 'They gave my red hat to the donkey.'
@@ -30,24 +28,25 @@ class TestClass:
         cursor.insertText(sentence)
         cursor.select(3)
         assert cursor.selectedText() == sentence
+        assert self.editor.text.tabStopWidth() == 50
 
     def test_bars(self):
         """
         Tests whether the widget contains a status bar and menu bar.
         """
-        assert self.editor.statusBar()
-        assert self.editor.menuBar()
+        assert self.editor.statusBar().isVisible()
+        assert self.editor.menuBar().isVisible()
 
     def test_menu_bar(self):
         """
         Tests whether the menu items appear on the menu bar.
         """
-        assert self.editor.file
-        assert self.editor.edit
-        assert self.editor.form
-        assert self.editor.tools
-        assert self.editor.view
-        assert self.editor.help_option
+        assert self.editor.file.isEnabled()
+        assert self.editor.edit.isEnabled()
+        assert self.editor.form.isEnabled()
+        assert self.editor.tools.isEnabled()
+        assert self.editor.view.isEnabled()
+        assert self.editor.help_option.isEnabled()
 
     def test_menu_items(self, qtbot):
         """
