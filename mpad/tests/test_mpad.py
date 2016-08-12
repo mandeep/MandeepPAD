@@ -92,6 +92,8 @@ class TestClass:
         QTimer.singleShot(500, interact)
 
     def test_quit_application(self, qtbot, monkeypatch):
+        """Qtbot scolls through menu items and monkeypatch intercepts the quit
+        application call prior to it being called."""
         exit_calls = []
         monkeypatch.setattr(QApplication, 'quit', lambda: exit_calls.append(1))
         qtbot.keyClick(self.editor.file, Qt.Key_Down)
@@ -101,6 +103,36 @@ class TestClass:
         qtbot.keyClick(self.editor.file, Qt.Key_Down)
         qtbot.keyClick(self.editor.file, Qt.Key_Enter)
         assert exit_calls == [1]
+
+    def test_undo_action(self, qtbot):
+        """Inserts text into the text area then qtbot navigates to Undo
+        and selects it.
+        """
+        sentence = "My back. There goes my back again."
+        cursor = self.editor.text.textCursor()
+        cursor.insertText(sentence)
+        qtbot.mouseClick(self.editor.edit, Qt.LeftButton)
+        qtbot.keyClick(self.editor.edit, Qt.Key_Down)
+        qtbot.keyClick(self.editor.edit, Qt.Key_Enter)
+        cursor.select(3)
+        assert cursor.selectedText() is ''
+
+    def test_redo_action(self, qtbot):
+        """Inserts text into the text area then qtbot navigates to Undo
+        and selects it. Qtbot  then navigates to the redo action and
+        selects it.
+        """
+        sentence = "Oh, hello, Principal Skinner. I'd get up, but the boy crippled me."
+        cursor = self.editor.text.textCursor()
+        cursor.insertText(sentence)
+        qtbot.mouseClick(self.editor.edit, Qt.LeftButton)
+        qtbot.keyClick(self.editor.edit, Qt.Key_Down)
+        qtbot.keyClick(self.editor.edit, Qt.Key_Enter)
+        qtbot.mouseClick(self.editor.edit, Qt.LeftButton)
+        qtbot.keyClick(self.editor.edit, Qt.Key_Down)
+        qtbot.keyClick(self.editor.edit, Qt.Key_Enter)
+        cursor.select(3)
+        assert cursor.selectedText() == sentence
 
     def test_menu_items(self, qtbot):
         qtbot.mouseClick(self.editor.edit, Qt.LeftButton)
