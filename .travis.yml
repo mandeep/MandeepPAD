@@ -15,6 +15,7 @@ install:
   - pip install coveralls
   - pip install pytest
   - pip install pytest-qt
+  - pip install pytest-mock
   - pip install pytest-faulthandler
 before_script:
   - export DISPLAY=:99.0
