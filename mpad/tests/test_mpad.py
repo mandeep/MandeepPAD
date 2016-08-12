@@ -2,7 +2,7 @@ from mpad import editor
 from PyQt5.QtCore import Qt
 from PyQt5.QtPrintSupport import QPrintDialog
 from PyQt5.QtWidgets import (QMainWindow, QApplication, QTextEdit, QAction,
-                             QFileDialog, QFontDialog, QMessageBox, QInputDialog)
+                             QFileDialog, QFontDialog, QMessageBox, QInputDialog, QWidget)
 import sys
 
 app = QApplication(sys.argv)
@@ -48,12 +48,22 @@ class TestClass:
         assert self.editor.view.isEnabled()
         assert self.editor.help_option.isEnabled()
 
-    def test_menu_items(self, qtbot):
+    def test_file_menu_items(self, qtbot):
         """
         Qtbot simulates mouse clicks inside the text editor window to ensure
         that the items on the menu bar are clickable.
         """
+        # Test to see if a new window opens when New File is selected
         qtbot.mouseClick(self.editor.file, Qt.LeftButton)
+        qtbot.keyClick(self.editor.file, Qt.Key_Down)
+        qtbot.keyClick(self.editor.file, Qt.Key_Enter)
+        assert self.editor.new_window.windowTitle() == 'MandeepPAD'
+
+        # Test to see if an open dialog opens when Open File is selected
+        qtbot.mouseClick(self.editor.file, Qt.LeftButton)
+        qtbot.keyClick(self.editor.file, Qt.Key_Down)
+
+    def test_menu_items(self, qtbot):
         qtbot.mouseClick(self.editor.edit, Qt.LeftButton)
         qtbot.mouseClick(self.editor.form, Qt.LeftButton)
         qtbot.mouseClick(self.editor.tools, Qt.LeftButton)
