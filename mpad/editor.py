@@ -306,8 +306,8 @@ class TextEditor(QMainWindow):
         """
         Creates a new window with an empty text area.
         """
-        new_window = TextEditor(self)
-        new_window.show()
+        self.new_window = TextEditor(self)
+        self.new_window.show()
 
     def open_file(self):
         """
