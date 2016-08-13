@@ -1,14 +1,11 @@
-============
-MandeepPAD
-============
+.. image:: mpad/images/title.png
+
+
+|travis| |coverage|
 
 MandeepPAD is a rich and plain text editor built with Python and the PyQt5 library. The application
 was created as a way to learn PyQt in addition to continuing a project I started in Visual Basic 6
 at the ripe old age of 12.
-
--------------------
-|travis| |coverage|
--------------------
 
 .. image:: mpad/images/screen.png
 
