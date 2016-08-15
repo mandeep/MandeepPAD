@@ -25,5 +25,5 @@ When the package is finished installing, the following command will run the appl
 
 .. |travis| image:: https://travis-ci.org/mandeepbhutani/MandeepPAD.svg?branch=master
     :target: https://travis-ci.org/mandeepbhutani/MandeepPAD
-.. |coverage| image:: https://coveralls.io/repos/github/mandeepbhutani/MandeepPAD/badge.svg?branch=master
-    :target: https://coveralls.io/github/mandeepbhutani/MandeepPAD?branch=master
+.. |coverage| image:: https://codecov.io/gh/mandeepbhutani/MandeepPAD/branch/master/graph/badge.svg
+    :target: https://codecov.io/gh/mandeepbhutani/MandeepPAD
