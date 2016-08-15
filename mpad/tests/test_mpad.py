@@ -70,7 +70,7 @@ class TestClass:
         qtbot.keyClick(self.editor.file, Qt.Key_Down)
         qtbot.keyClick(self.editor.file, Qt.Key_Down)
         qtbot.keyClick(self.editor.file, Qt.Key_Down)
-        mock.patch.object(QFileDialog, 'getSaveFileName', return_value=('.travis.yml', '*.txt'))
+        mock.patch.object(QFileDialog, 'getSaveFileName', return_value=('', ''))
         self.editor.save_file()
 
     def test_print_file(self, qtbot, mock):
