@@ -196,3 +196,45 @@ class TestClass:
         qtbot.keyClick(self.editor.tools, Qt.Key_Down)
         mock.patch.object(QInputDialog, 'getText', return_value=('Hi!', True))
         qtbot.keyClick(self.editor.tools, Qt.Key_Enter)
+
+    def test_date(self, qtbot):
+        """Qtbot opens the tools menu and selects the Insert Date item."""
+        cursor = self.editor.text.textCursor()
+        qtbot.mouseClick(self.editor.tools, Qt.LeftButton)
+        qtbot.keyClick(self.editor.tools, Qt.Key_Down)
+        qtbot.keyClick(self.editor.tools, Qt.Key_Down)
+        qtbot.keyClick(self.editor.tools, Qt.Key_Down)
+        qtbot.keyClick(self.editor.tools, Qt.Key_Enter)
+        cursor.select(3)
+        assert '2016' in cursor.selectedText()
+
+    def test_menu_bar_visibility(self, qtbot):
+        """Qtbot opens the view menu and selects the Hide Menu Bar item."""
+        qtbot.mouseClick(self.editor.view, Qt.LeftButton)
+        qtbot.keyClick(self.editor.view, Qt.Key_Down)
+        qtbot.keyClick(self.editor.view, Qt.Key_Enter)
+        assert self.editor.menu_bar.isVisible() is False
+
+    def test_tool_bar_visibility(self, qtbot):
+        """Qtbot opens the view menu and selects the Hide Tool Bar item."""
+        qtbot.mouseClick(self.editor.view, Qt.LeftButton)
+        qtbot.keyClick(self.editor.view, Qt.Key_Down)
+        qtbot.keyClick(self.editor.view, Qt.Key_Down)
+        qtbot.keyClick(self.editor.view, Qt.Key_Enter)
+        assert self.editor.toolbar.isVisible() is False
+
+    def test_status_bar_visibility(self, qtbot):
+        """Qtbot opens the view menu and selects the Hide Status Bar item."""
+        qtbot.mouseClick(self.editor.view, Qt.LeftButton)
+        qtbot.keyClick(self.editor.view, Qt.Key_Down)
+        qtbot.keyClick(self.editor.view, Qt.Key_Down)
+        qtbot.keyClick(self.editor.view, Qt.Key_Down)
+        qtbot.keyClick(self.editor.view, Qt.Key_Enter)
+        assert self.editor.status_bar.isVisible() is False
+
+    def test_about(self, qtbot, mock):
+        """Qtbot opens the help menu and mock executes the about message box."""
+        qtbot.mouseClick(self.editor.help_option, Qt.LeftButton)
+        qtbot.keyClick(self.editor.help_option, Qt.Key_Down)
+        mock.patch.object(QMessageBox, 'exec_', return_value='accept')
+        qtbot.keyClick(self.editor.help_option, Qt.Key_Enter)
