@@ -41,7 +41,7 @@ class TextEditor(QMainWindow):
 
         self.status_bar = self.statusBar()
         self.tool_bar()
-        
+
         self.menu_bar_item()
         self.file_menu()
         self.edit_menu()
@@ -335,7 +335,8 @@ class TextEditor(QMainWindow):
                 file.write(self.text.toPlainText())
             self.update_title()
 
-    def print_file(self):
+    @staticmethod
+    def print_file():
         """
         Opens print dialog that allows the user to change the print settings
         as well as print the document.
@@ -497,7 +498,8 @@ class TextEditor(QMainWindow):
             self.tool_bar_action.setText('Hide tool bar')
             self.tool_bar_action.setStatusTip('Hide the tool bar.')
 
-    def about(self):
+    @staticmethod
+    def about():
         """
         Shows the user a popup box with details of the application.
         """
@@ -509,7 +511,8 @@ class TextEditor(QMainWindow):
         message.setInformativeText('GitHub: mandeepbhutani')
         message.exec_()
 
-    def quit_application(self):
+    @staticmethod
+    def quit_application():
         """
         Closes the window and quits the application.
         """
