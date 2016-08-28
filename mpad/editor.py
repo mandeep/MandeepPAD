@@ -289,7 +289,7 @@ class TextEditor(QMainWindow):
         find_icon = pkg_resources.resource_filename('mpad.images', 'find_icon.png')
         find_in_text = QAction(QIcon(find_icon), 'Find text', self)
         find_in_text.triggered.connect(self.text_search)
-        
+
         self.toggle_menu_bar = QAction(QIcon().fromTheme('document-revert'), 'Show menu bar', self)
         self.toggle_menu_bar.triggered.connect(self.menu_bar_visibility)
 
