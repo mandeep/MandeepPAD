@@ -23,7 +23,7 @@ When the package is finished installing, the following command will run the appl
 
     MandeepPAD
 
-.. |travis| image:: https://travis-ci.org/mandeepbhutani/MandeepPAD.svg?branch=master
-    :target: https://travis-ci.org/mandeepbhutani/MandeepPAD
-.. |coverage| image:: https://codecov.io/gh/mandeepbhutani/MandeepPAD/branch/master/graph/badge.svg
-    :target: https://codecov.io/gh/mandeepbhutani/MandeepPAD
+.. |travis| image:: https://travis-ci.org/mandeep/MandeepPAD.svg?branch=master
+    :target: https://travis-ci.org/mandeep/MandeepPAD
+.. |coverage| image:: https://coveralls.io/repos/github/mandeep/MandeepPAD/badge.svg?branch=master
+    :target: https://coveralls.io/github/mandeep/MandeepPAD?branch=master
