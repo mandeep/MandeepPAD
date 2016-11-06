@@ -1,8 +1,8 @@
 from setuptools import setup
 
 setup(name='MandeepPAD',
-      version='0.9',
-      author='Mandeep Bhutani',
+      version='0.9.1',
+      author='Mandeep',
       packages=['mpad', 'mpad.images'],
       package_data={'mpad.images': ['*.png']},
       install_requires=['arrow'],
