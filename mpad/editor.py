@@ -507,8 +507,8 @@ class TextEditor(QMainWindow):
         message.setWindowTitle('MandeepPAD')
         message_icon = pkg_resources.resource_filename('mpad.images', 'md_help.png')
         message.setWindowIcon(QIcon(message_icon))
-        message.setText('Created by Mandeep Bhutani')
-        message.setInformativeText('GitHub: mandeepbhutani')
+        message.setText('Created by Mandeep')
+        message.setInformativeText('GitHub: mandeep')
         message.exec_()
 
     @staticmethod
