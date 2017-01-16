@@ -233,7 +233,7 @@ def test_date(qtbot, window):
     qtbot.keyClick(window.tools, Qt.Key_Down)
     qtbot.keyClick(window.tools, Qt.Key_Enter)
     cursor.select(3)
-    assert '2016' in cursor.selectedText()
+    assert '2017' in cursor.selectedText()
 
 
 def test_menu_bar_visibility(qtbot, window):
