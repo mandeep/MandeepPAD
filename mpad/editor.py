@@ -4,7 +4,7 @@ import pkg_resources
 from PyQt5.QtCore import Qt
 from PyQt5.QtGui import QIcon
 from PyQt5.QtPrintSupport import QPrintDialog
-from PyQt5.QtWidgets import (QMainWindow, QApplication, QTextEdit, QAction,
+from PyQt5.QtWidgets import (QMainWindow, QApplication, QPlainTextEdit, QAction,
                              QFileDialog, QFontDialog, QMessageBox,
                              QInputDialog, QToolBar)
 import sys
@@ -28,9 +28,9 @@ class TextEditor(QMainWindow):
     def init_ui(self):
         """
         Contains all of the UI elements of the text editor. These elements are
-        sent to QMainWindow. QTextEdit creates a text area in the main window.
+        sent to QMainWindow. QPlainTextEdit creates a text area in the main window.
         """
-        self.text = QTextEdit(self)
+        self.text = QPlainTextEdit(self)
         self.setCentralWidget(self.text)
 
         self.setGeometry(400, 200, 1024, 768)
@@ -318,7 +318,7 @@ class TextEditor(QMainWindow):
 
         if self.file_name:
             with open(self.file_name) as file:
-                self.text.setText(file.read())
+                self.text.setPlainText(file.read())
             self.update_title()
 
     def save_file(self):
@@ -424,7 +424,7 @@ class TextEditor(QMainWindow):
     def char_count(self):
         """
         Finds the length of all of the text in the document via
-        QTextEdit().textCursor().position() and returns it as a string
+        QPlainTextEdit().textCursor().position() and returns it as a string
         in a message box.
         """
         cursor = self.text.textCursor()
@@ -437,7 +437,7 @@ class TextEditor(QMainWindow):
     def word_count(self):
         """
         Finds the number of words in the document with use of the
-        textCursor() method of QTextEdit. The entire text in the document
+        textCursor() method of QPlainTextEdit. The entire text in the document
         is automatically selected. Next the text is split into a list by
         using spaces as a separator. The length of the list is returned
         as a string in a message box.
