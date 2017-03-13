@@ -1,7 +1,7 @@
 from setuptools import setup
 
 setup(name='MandeepPAD',
-      version='0.11.0',
+      version='0.11.1',
       author='Mandeep',
       packages=['mpad', 'mpad.images'],
       package_data={'mpad.images': ['*.png']},

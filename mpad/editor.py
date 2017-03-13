@@ -6,7 +6,7 @@ import arrow
 from PyQt5.QtCore import Qt
 from PyQt5.QtGui import QIcon
 from PyQt5.QtPrintSupport import QPrintDialog
-from PyQt5.QtWidgets import (QMainWindow, QApplication, QPlainTextEdit, QAction,
+from PyQt5.QtWidgets import (QDialog, QMainWindow, QApplication, QPlainTextEdit, QAction,
                              QFileDialog, QFontDialog, QMessageBox,
                              QInputDialog, QToolBar)
 
@@ -286,12 +286,11 @@ class TextEditor(QMainWindow):
                 file.write(self.text.toPlainText())
             self.update_title()
 
-    @staticmethod
-    def print_file():
+    def print_file(self):
         """Print the current document to the selected printer."""
         print_dialog = QPrintDialog()
-        print_dialog.printer()
-        print_dialog.exec_()
+        if print_dialog.exec_() == QDialog.Accepted:
+            self.text.print(print_dialog.printer())
 
     def update_title(self):
         """Update the window title to show the name of the current document."""
