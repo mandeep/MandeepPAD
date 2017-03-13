@@ -1,13 +1,14 @@
-import arrow
 import os
 import pkg_resources
+import sys
+
+import arrow
 from PyQt5.QtCore import Qt
 from PyQt5.QtGui import QIcon
 from PyQt5.QtPrintSupport import QPrintDialog
 from PyQt5.QtWidgets import (QMainWindow, QApplication, QPlainTextEdit, QAction,
                              QFileDialog, QFontDialog, QMessageBox,
                              QInputDialog, QToolBar)
-import sys
 
 
 class TextEditor(QMainWindow):
@@ -23,13 +24,7 @@ class TextEditor(QMainWindow):
         elements to the main window.
         """
         QMainWindow.__init__(self, parent)
-        self.init_ui()
 
-    def init_ui(self):
-        """
-        Contains all of the UI elements of the text editor. These elements are
-        sent to QMainWindow. QPlainTextEdit creates a text area in the main window.
-        """
         self.text = QPlainTextEdit(self)
         self.setCentralWidget(self.text)
 
@@ -53,9 +48,7 @@ class TextEditor(QMainWindow):
         self.file_name = None
 
     def menu_bar_item(self):
-        """
-        The menu bar is initiated here along with each option on the menu bar.
-        """
+        """Initiate the menubar along with each of its items."""
         self.menu_bar = self.menuBar()
         self.file = self.menu_bar.addMenu('File')
         self.edit = self.menu_bar.addMenu('Edit')
@@ -65,23 +58,18 @@ class TextEditor(QMainWindow):
         self.help_option = self.menu_bar.addMenu('Help')
 
     def file_menu(self):
-        """
-        Contains all of the clickable items inside the file menu.
-        Each item is initiated via QAction and called via their own methods
-        when triggered. The addAction method sends the actions to the
-        menu_bar().
-        """
-        self.new_action = QAction('New file', self)
+        """Initiate each of the items in the File submenu."""
+        self.new_action = QAction('New File', self)
         self.new_action.setStatusTip('Create a new document.')
         self.new_action.setShortcut('CTRL+N')
         self.new_action.triggered.connect(self.new_file)
 
-        self.open_action = QAction('Open file', self)
+        self.open_action = QAction('Open File', self)
         self.open_action.setStatusTip('Open an existing document.')
         self.open_action.setShortcut('CTRL+O')
         self.open_action.triggered.connect(self.open_file)
 
-        self.save_action = QAction('Save file', self)
+        self.save_action = QAction('Save File', self)
         self.save_action.setStatusTip('Save the current document.')
         self.save_action.setShortcut('CTRL+S')
         self.save_action.triggered.connect(self.save_file)
@@ -94,7 +82,7 @@ class TextEditor(QMainWindow):
         self.exit_action = QAction('Quit', self)
         self.exit_action.setStatusTip('Quit application.')
         self.exit_action.setShortcut('CTRL+Q')
-        self.exit_action.triggered.connect(self.quit_application)
+        self.exit_action.triggered.connect(lambda: QApplication.quit())
 
         self.file.addAction(self.new_action)
         self.file.addAction(self.open_action)
@@ -105,12 +93,7 @@ class TextEditor(QMainWindow):
         self.file.addAction(self.exit_action)
 
     def edit_menu(self):
-        """
-        Contains undo, redo, copy, cut, paste, and select all items of the
-        edit menu. Each item is initiated via QAction and called via PyQt's
-        text methods when triggered. The addAction method sends the actions
-        to the menu_bar().
-        """
+        """Initiate items that allow the user to edit the current document."""
         self.undo_action = QAction('Undo', self)
         self.undo_action.setStatusTip('Undo last action.')
         self.undo_action.setShortcut('CTRL+Z')
@@ -140,7 +123,7 @@ class TextEditor(QMainWindow):
         self.delete_action.setStatusTip('Delete selected text.')
         self.delete_action.triggered.connect(self.delete_text)
 
-        self.select_action = QAction('Select all', self)
+        self.select_action = QAction('Select All', self)
         self.select_action.setStatusTip('Select all text.')
         self.select_action.setShortcut('CTRL+A')
         self.select_action.triggered.connect(self.text.selectAll)
@@ -156,78 +139,34 @@ class TextEditor(QMainWindow):
         self.edit.addAction(self.select_action)
 
     def format_menu(self):
-        """
-        Contains items that allow the user to change the format of the text.
-        """
+        """Initiate items that allow the user to change the format of the text."""
         self.font_family_action = QAction('Font', self)
         self.font_family_action.setStatusTip('Change the current font.')
         self.font_family_action.triggered.connect(self.change_font)
 
-        self.bold_action = QAction('Bold', self)
-        self.bold_action.setStatusTip('Change the font weight to bold.')
-        self.bold_action.setShortcut('CTRL+B')
-        self.bold_action.triggered.connect(self.bolden)
-
-        self.italic_action = QAction('Italic', self)
-        self.italic_action.setStatusTip('Change the font style to italic.')
-        self.italic_action.setShortcut('CTRL+I')
-        self.italic_action.triggered.connect(self.italicize)
-
-        self.underline_action = QAction('Underline', self)
-        self.underline_action.setStatusTip('Add an underline to the font.')
-        self.underline_action.setShortcut('CTRL+U')
-        self.underline_action.triggered.connect(self.underliner)
-
         self.form.addAction(self.font_family_action)
-        self.form.addSeparator()
-        self.form.addAction(self.bold_action)
-        self.form.addAction(self.italic_action)
-        self.form.addAction(self.underline_action)
-
-    def view_menu(self):
-        """
-        Items that allow the user to change the design of the application.
-        """
-
-        self.menu_bar_action = QAction('Hide menu bar', self)
-        self.menu_bar_action.setStatusTip('Hide the menu bar.')
-        self.menu_bar_action.triggered.connect(self.menu_bar_visibility)
-
-        self.status_bar_action = QAction('Hide status bar', self)
-        self.status_bar_action.setStatusTip('Hide the status bar.')
-        self.status_bar_action.triggered.connect(self.status_bar_visibility)
-
-        self.tool_bar_action = QAction('Hide tool bar', self)
-        self.tool_bar_action.setStatusTip('Hide the tool bar.')
-        self.tool_bar_action.triggered.connect(self.tool_bar_visibility)
-
-        self.view.addAction(self.menu_bar_action)
-        self.view.addAction(self.tool_bar_action)
-        self.view.addAction(self.status_bar_action)
 
     def tools_menu(self):
-        """
-        Contains items that allow the user to enhance their text experience.
-        """
-        self.find_action = QAction('Find text', self)
+        """Initialize items that allow the user to enhance their text experience."""
+        self.find_action = QAction('Find Text', self)
         self.find_action.setStatusTip('Find text within the document.')
         self.find_action.setShortcut('CTRL+F')
         self.find_action.triggered.connect(self.text_search)
 
-        self.find_next_action = QAction('Find next', self)
+        self.find_next_action = QAction('Find Next', self)
         self.find_next_action.setStatusTip('Find the next occurrence of the selected text.')
         self.find_next_action.setShortcut('F3')
         self.find_next_action.triggered.connect(self.find_next_text)
 
-        self.char_count_action = QAction('Character count', self)
+        self.char_count_action = QAction('Character Count', self)
         self.char_count_action.setStatusTip('View the number of characters in the document.')
         self.char_count_action.triggered.connect(self.char_count)
 
-        self.word_count_action = QAction('Word count', self)
+        self.word_count_action = QAction('Word Count', self)
         self.word_count_action.setStatusTip('View the number of words in the selection.')
         self.word_count_action.triggered.connect(self.word_count)
 
-        self.date_action = QAction('Insert date/time', self)
+        self.date_action = QAction('Insert Date/Time', self)
         self.date_action.setStatusTip('Add a date and time to the document.')
         self.date_action.triggered.connect(self.insert_date)
 
@@ -239,10 +178,26 @@ class TextEditor(QMainWindow):
         self.tools.addAction(self.char_count_action)
         self.tools.addAction(self.word_count_action)
 
+    def view_menu(self):
+        """Initiate items that allow the user to change the design of the application."""
+        self.menu_bar_action = QAction('Hide Menubar', self)
+        self.menu_bar_action.setStatusTip('Hide the menubar.')
+        self.menu_bar_action.triggered.connect(self.menu_bar_visibility)
+
+        self.tool_bar_action = QAction('Show Toolbar', self)
+        self.tool_bar_action.setStatusTip('Show the toolbar.')
+        self.tool_bar_action.triggered.connect(self.tool_bar_visibility)
+
+        self.status_bar_action = QAction('Hide Statusbar', self)
+        self.status_bar_action.setStatusTip('Hide the status bar.')
+        self.status_bar_action.triggered.connect(self.status_bar_visibility)
+
+        self.view.addAction(self.menu_bar_action)
+        self.view.addAction(self.tool_bar_action)
+        self.view.addAction(self.status_bar_action)
+
     def help_menu(self):
-        """
-        Contains informative items for the user.
-        """
+        """Contains informative items for the user."""
         self.about_action = QAction('About', self)
         self.about_action.setStatusTip('About application.')
         self.about_action.triggered.connect(self.about)
@@ -250,13 +205,13 @@ class TextEditor(QMainWindow):
         self.help_option.addAction(self.about_action)
 
     def tool_bar(self):
-        """
-        Creates a toolbar underneath the menu bar with common items such as new
+        """Create a toolbar underneath the menu bar with common items such as new
         document, open document, save document, etc.
         """
         self.toolbar = QToolBar()
         self.addToolBar(Qt.TopToolBarArea, self.toolbar)
         self.toolbar.setMovable(False)
+        self.toolbar.hide()
 
         new_window_icon = pkg_resources.resource_filename('mpad.images', 'document_icon.png')
         new_window = QAction(QIcon(new_window_icon), 'New window', self)
@@ -303,17 +258,12 @@ class TextEditor(QMainWindow):
         self.toolbar.addAction(find_in_text)
 
     def new_file(self):
-        """
-        Creates a new window with an empty text area.
-        """
+        """Create a new window with an empty text area."""
         new_window = TextEditor(self)
         new_window.show()
 
     def open_file(self):
-        """
-        Allows for the user to open any file located on their drive.
-        When a file is opened, the title is updated to include the filename.
-        """
+        """Open an existing document."""
         self.file_name, _ = QFileDialog.getOpenFileName(self, 'Open file')
 
         if self.file_name:
@@ -322,7 +272,8 @@ class TextEditor(QMainWindow):
             self.update_title()
 
     def save_file(self):
-        """
+        """Save the current document.
+
         If the current file does not have a file name, a dialog opens and
         allows the user to save the file to their drive. The title is
         updated to reflect the new filename.
@@ -337,69 +288,31 @@ class TextEditor(QMainWindow):
 
     @staticmethod
     def print_file():
-        """
-        Opens print dialog that allows the user to change the print settings
-        as well as print the document.
-        """
+        """Print the current document to the selected printer."""
         print_dialog = QPrintDialog()
         print_dialog.printer()
         print_dialog.exec_()
 
     def update_title(self):
-        """
-        Uses os.path to retrieve the name of the current file and update
-        the window title to include the filename.
-        """
+        """Update the window title to show the name of the current document."""
         current_file = os.path.basename(self.file_name)
         self.setWindowTitle('MandeepPAD - {}' .format(current_file))
 
     def delete_text(self):
-        """
-        Deletes the text in the current selection.
-        """
+        """Delete the text in the current selection."""
         cursor = self.text.textCursor()
         cursor.removeSelectedText()
 
     def change_font(self):
-        """
-        Opens a font dialog that allows the user to change the font family,
-        style and size.
-        """
+        """Open a font dialog that allows the user to change the font family, style and size."""
         font, selected = QFontDialog.getFont(self)
         if selected:
             self.text.setFont(font)
 
-    def bolden(self):
-        """
-        Boldens the text that is to be written in the document.
-        """
-        if self.text.fontWeight() == 50:
-            self.text.setFontWeight(75)
-        else:
-            self.text.setFontWeight(50)
-
-    def italicize(self):
-        """
-        Italicizes the text that is to be written in the document.
-        """
-        if not self.text.fontItalic():
-            self.text.setFontItalic(True)
-        else:
-            self.text.setFontItalic(False)
-
-    def underliner(self):
-        """
-        Adds an underline to the text that is to be written in the document.
-        """
-        if not self.text.fontUnderline():
-            self.text.setFontUnderline(True)
-        else:
-            self.text.setFontUnderline(False)
-
     def text_search(self):
-        """
-        Searches the document for the text given by the user from the input
-        dialog. If there is no current selection, the cursor is moved to the
+        """Search the document for the text given by the user from the input dialog. 
+
+        If there is no current selection, the cursor is moved to the
         beginning of the document before starting the search. If there is a
         current selection, the search returns text located after the
         selected text.
@@ -413,34 +326,29 @@ class TextEditor(QMainWindow):
             self.text.find(find_text)
 
     def find_next_text(self):
-        """
-        Finds the next occurrence of the selected text. Can be used with the
-        'Find text' dialog or as a standalone action.
+        """Find the next occurrence of the selected text.
+
+        May be used with the 'Find Text' dialog or as a standalone action.
         """
         if self.text.textCursor().hasSelection():
             selected_text = self.text.textCursor().selectedText()
             self.text.find(selected_text)
 
     def char_count(self):
-        """
-        Finds the length of all of the text in the document via
-        QPlainTextEdit().textCursor().position() and returns it as a string
-        in a message box.
-        """
+        """Find the length of all of the text in the document."""
         cursor = self.text.textCursor()
         character_message = QMessageBox()
         character_message.setWindowTitle('Character count')
         character_message.setText('Total characters in document:')
-        character_message.setInformativeText(str(cursor.position()))
+        character_message.setInformativeText("{:,}" .format(cursor.position()))
         character_message.exec_()
 
     def word_count(self):
-        """
-        Finds the number of words in the document with use of the
-        textCursor() method of QPlainTextEdit. The entire text in the document
-        is automatically selected. Next the text is split into a list by
-        using spaces as a separator. The length of the list is returned
-        as a string in a message box.
+        """Find the number of words in the document.
+
+        The entire text in the document is automatically selected.
+        Next the text is split into a list by using spaces as a separator.
+        The length of the list is returned as a string in a message box.
         """
         cursor = self.text.textCursor()
         cursor.select(3)
@@ -448,12 +356,12 @@ class TextEditor(QMainWindow):
         word_count_message.setWindowTitle('Word count')
         word_count_message.setText('Total words in document:')
         number_of_words = len(cursor.selectedText().split())
-        word_count_message.setInformativeText(str(number_of_words))
+        word_count_message.setInformativeText("{:,}" .format(number_of_words))
         word_count_message.exec_()
 
     def insert_date(self):
-        """
-        Inserts the current date and time in the format of YYYY-MM-DD HH:mm:ss.
+        """Insert the current date and time in the format of YYYY-MM-DD HH:mm:ss.
+
         Example: 2016-07-14 15:39:01. The time zone retrieved defaults to
         the current user's time zone.
         """
@@ -462,10 +370,10 @@ class TextEditor(QMainWindow):
         cursor.insertText(time)
 
     def menu_bar_visibility(self):
-        """
-        Allows the user to set the visibility of the menu bar. When the menu
-        bar is toggled off, an icon is placed on the tool bar to allow the user
-        to show the menu bar again.
+        """Set the visibility of the menu bar.
+
+        When the menu bar is toggled off, an icon is placed on the tool bar
+        to allow the user to show the menu bar again.
         """
         if self.menu_bar.isVisible():
             self.menu_bar.setVisible(False)
@@ -475,34 +383,28 @@ class TextEditor(QMainWindow):
             self.toolbar.removeAction(self.toggle_menu_bar)
 
     def status_bar_visibility(self):
-        """
-        Allows the user to specify the visibility of the status bar.
-        """
+        """Set the visibility of the status bar."""
         if self.status_bar.isVisible():
             self.status_bar.setVisible(False)
-            self.status_bar_action.setText('Show status bar')
+            self.status_bar_action.setText('Show Statusbar')
         else:
             self.status_bar.setVisible(True)
-            self.status_bar_action.setText('Hide status bar')
+            self.status_bar_action.setText('Hide Statusbar')
 
     def tool_bar_visibility(self):
-        """
-        Allows the user to specify the visibility of the tool bar.
-        """
+        """Set the visibility of the toolbar."""
         if self.toolbar.isVisible():
             self.toolbar.hide()
-            self.tool_bar_action.setText('Show tool bar')
+            self.tool_bar_action.setText('Show Toolbar')
             self.tool_bar_action.setStatusTip('Show the tool bar.')
         else:
             self.toolbar.show()
-            self.tool_bar_action.setText('Hide tool bar')
+            self.tool_bar_action.setText('Hide Toolbar')
             self.tool_bar_action.setStatusTip('Hide the tool bar.')
 
     @staticmethod
     def about():
-        """
-        Shows the user a popup box with details of the application.
-        """
+        """Display a dialog with details of the application."""
         message = QMessageBox()
         message.setWindowTitle('MandeepPAD')
         message_icon = pkg_resources.resource_filename('mpad.images', 'md_help.png')
@@ -511,18 +413,9 @@ class TextEditor(QMainWindow):
         message.setInformativeText('GitHub: mandeep')
         message.exec_()
 
-    @staticmethod
-    def quit_application():
-        """
-        Closes the window and quits the application.
-        """
-        QApplication.quit()
-
 
 def main():
-    """
-    QApplication manages the GUI that is initiated by the window variable.
-    """
+    """QApplication manages the GUI that is initiated by the window variable."""
     application = QApplication(sys.argv)
     window = TextEditor()
     window.show()
