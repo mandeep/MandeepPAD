@@ -6,9 +6,9 @@ import arrow
 from PyQt5.QtCore import Qt
 from PyQt5.QtGui import QIcon
 from PyQt5.QtPrintSupport import QPrintDialog
-from PyQt5.QtWidgets import (QDialog, QMainWindow, QApplication, QPlainTextEdit, QAction,
-                             QFileDialog, QFontDialog, QMessageBox,
-                             QInputDialog, QToolBar)
+from PyQt5.QtWidgets import (QAction, QApplication, QDialog, QFileDialog,
+                             QFontDialog, QInputDialog, QMainWindow,
+                             QMessageBox, QPlainTextEdit, QToolBar)
 
 
 class TextEditor(QMainWindow):
