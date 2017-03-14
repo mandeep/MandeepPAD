@@ -28,7 +28,7 @@ class TextEditor(QMainWindow):
         self.text = QPlainTextEdit(self)
         self.setCentralWidget(self.text)
 
-        self.setGeometry(400, 200, 1024, 768)
+        self.resize(800, 700)
         self.setWindowTitle('MandeepPAD')
         self.text.setTabStopWidth(50)
         window_icon = pkg_resources.resource_filename('mpad.images', 'icon.png')
