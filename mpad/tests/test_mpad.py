@@ -22,8 +22,8 @@ def test_window(window):
 
 def test_geometry(window):
     """Test the default window geometry."""
-    assert window.width() == 1024
-    assert window.height() == 768
+    assert window.width() == 800
+    assert window.height() == 700
 
 
 def test_text_area(qtbot, window):
