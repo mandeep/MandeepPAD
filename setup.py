@@ -4,9 +4,9 @@ from setuptools import setup
 
 
 if sys.version_info.major == 3 and sys.version_info.minor > 5:
-    requirements = ['arrow', 'pyqt5']
+    requirements = ['pyqt5']
 else:
-    requirements = ['arrow']
+    requirements = []
 
 
 setup(name='MandeepPAD',

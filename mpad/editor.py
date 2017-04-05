@@ -1,8 +1,8 @@
 import os
 import pkg_resources
+import time
 import sys
 
-import arrow
 from PyQt5.QtCore import Qt
 from PyQt5.QtGui import QIcon
 from PyQt5.QtPrintSupport import QPrintDialog
@@ -361,12 +361,12 @@ class TextEditor(QMainWindow):
     def insert_date(self):
         """Insert the current date and time in the format of YYYY-MM-DD HH:mm:ss.
 
-        Example: 2016-07-14 15:39:01. The time zone retrieved defaults to
+        Example: 2017-04-04 22:21:01. The time zone retrieved defaults to
         the current user's time zone.
         """
         cursor = self.text.textCursor()
-        time = arrow.now().format('YYYY-MM-DD HH:mm:ss')
-        cursor.insertText(time)
+        current_time = time.strftime("%Y-%m-%d %H:%M:%S", time.localtime())
+        cursor.insertText(current_time)
 
     def menu_bar_visibility(self):
         """Set the visibility of the menu bar.
