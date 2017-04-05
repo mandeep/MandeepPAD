@@ -418,4 +418,8 @@ def main():
     application = QApplication(sys.argv)
     window = TextEditor()
     window.show()
+    if len(sys.argv) > 1 and os.path.isfile(sys.argv[1]):
+        with open(sys.argv[1]) as file:
+            window.text.setPlainText(file.read())
+            window.setWindowTitle('MandeepPAD - {}' .format(sys.argv[1]))
     sys.exit(application.exec_())
