@@ -4,7 +4,7 @@ import time
 import sys
 
 from PyQt5.QtCore import Qt
-from PyQt5.QtGui import QIcon
+from PyQt5.QtGui import QFont, QIcon
 from PyQt5.QtPrintSupport import QPrintDialog
 from PyQt5.QtWidgets import (QAction, QApplication, QDialog, QFileDialog,
                              QFontDialog, QInputDialog, QMainWindow,
@@ -31,6 +31,7 @@ class TextEditor(QMainWindow):
         self.resize(800, 700)
         self.setWindowTitle('MandeepPAD')
         self.text.setTabStopWidth(50)
+        self.text.setFont(QFont("Source Code Pro"))
         window_icon = pkg_resources.resource_filename('mpad.images', 'icon.png')
         self.setWindowIcon(QIcon(window_icon))
 
