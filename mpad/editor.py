@@ -265,7 +265,7 @@ class TextEditor(QMainWindow):
 
     def open_file(self):
         """Open an existing document."""
-        self.file_name, _ = QFileDialog.getOpenFileName(self, 'Open file')
+        self.file_name, _ = QFileDialog.getOpenFileName(self, 'Open File')
 
         if self.file_name:
             with open(self.file_name) as file:
@@ -280,7 +280,7 @@ class TextEditor(QMainWindow):
         updated to reflect the new filename.
         """
         if not self.file_name:
-            self.file_name, _ = QFileDialog.getSaveFileName(self, 'Save file')
+            self.file_name, _ = QFileDialog.getSaveFileName(self, 'Save File')
 
         if self.file_name:
             with open(self.file_name, 'w') as file:
