@@ -10,7 +10,7 @@ else:
 
 
 setup(name='MandeepPAD',
-      version='0.15.0',
+      version='0.16.0',
       author='Mandeep',
       packages=['mpad', 'mpad.images'],
       package_data={'mpad.images': ['*.png']},

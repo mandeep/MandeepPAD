@@ -75,6 +75,11 @@ class TextEditor(QMainWindow):
         self.save_action.setShortcut('CTRL+S')
         self.save_action.triggered.connect(self.save_file)
 
+        self.save_as_action = QAction('Save File As', self)
+        self.save_as_action.setStatusTip('Save the current document as a new file.')
+        self.save_as_action.setShortcut('CTRL+SHIFT+S')
+        self.save_as_action.triggered.connect(self.save_file_as)
+
         self.print_action = QAction('Print', self)
         self.print_action.setStatusTip('Print the current document.')
         self.print_action.setShortcut('CTRL+P')
@@ -88,6 +93,7 @@ class TextEditor(QMainWindow):
         self.file.addAction(self.new_action)
         self.file.addAction(self.open_action)
         self.file.addAction(self.save_action)
+        self.file.addAction(self.save_as_action)
         self.file.addSeparator()
         self.file.addAction(self.print_action)
         self.file.addSeparator()
@@ -286,6 +292,14 @@ class TextEditor(QMainWindow):
             with open(self.file_name, 'w') as file:
                 file.write(self.text.toPlainText())
             self.update_title()
+
+    def save_file_as(self):
+        """Save the current document as a new file."""
+        self.file_name, _ = QFileDialog.getSaveFileName(self, 'Save File')
+
+        with open(self.file_name, 'w') as file:
+            file.write(self.text.toPlainText())
+        self.update_title()
 
     def print_file(self):
         """Print the current document to the selected printer."""
