@@ -99,6 +99,7 @@ def test_print_file(qtbot, mock, window):
     qtbot.keyClick(window.file, Qt.Key_Down)
     qtbot.keyClick(window.file, Qt.Key_Down)
     qtbot.keyClick(window.file, Qt.Key_Down)
+    qtbot.keyClick(window.file, Qt.Key_Down)
     mock.patch.object(QPrintDialog, 'exec_', return_value='accept')
     qtbot.keyClick(window.file, Qt.Key_Enter)
 
@@ -110,6 +111,7 @@ def test_quit_application(qtbot, monkeypatch, window):
     application call prior to it being called."""
     exit_calls = []
     monkeypatch.setattr(QApplication, 'quit', lambda: exit_calls.append(1))
+    qtbot.keyClick(window.file, Qt.Key_Down)
     qtbot.keyClick(window.file, Qt.Key_Down)
     qtbot.keyClick(window.file, Qt.Key_Down)
     qtbot.keyClick(window.file, Qt.Key_Down)
