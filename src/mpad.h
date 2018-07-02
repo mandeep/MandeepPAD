@@ -34,6 +34,14 @@ enum editor_keys {
 };
 
 
+/**
+ * editor_row - data type for storing a row of text in the editor
+ *
+ * @characters: the characters in the row
+ * @render: the actual characters to draw on the screen (accounting for tabs)
+ * @size: the number of characters in the row
+ * @render_size: the length of the contents in render
+ */
 typedef struct editor_row {
     char *characters;
     char *render;
@@ -42,21 +50,44 @@ typedef struct editor_row {
 } editor_row;
 
 
+/**
+ * editor_configuration - the settings for the editor instance
+ *
+ * @x_position: the position of the cursor on the x-axis (top left is origin)
+ * @y_position: the position of the cursor on the y-axis
+ * @render_x_position: the index into the render field of the editor row
+ * @row_offset: the row where the cursor is currently positioned
+ * @column_offset: the column where the cursor is currently positioned
+ * @height: the screen height of the editor
+ * @width: the screen width of the editor
+ * @number_rows: the total number of rows in the editor that are filled with characters
+ * @rows: the lines in all of the rows in the editor
+ * @filename: the filename of the file currently read into the buffer
+ * @original_termios: the original terminal attributes before modification
+ *
+ */
 typedef struct editor_configuration {
     size_t x_position;
     size_t y_position;
     size_t render_x_position;
     size_t row_offset;
     size_t column_offset;
-    size_t screen_rows;
-    size_t screen_columns;
+    size_t height;
+    size_t width;
     size_t number_rows;
-    editor_row *row;
+    editor_row *rows;
     char *filename;
     struct termios original_termios;
 } editor_configuration;
 
 
+/**
+ * editor_buffer - the buffer that contains all of the characters prior to writing
+ *
+ * @data: the data held by the buffer
+ * @length: the length of the buffer
+ *
+ */
 typedef struct editor_buffer {
     char *data;
     ssize_t length;

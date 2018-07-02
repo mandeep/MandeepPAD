@@ -10,6 +10,7 @@
  *
  */
 void quit(const char *message) {
+    // clear the screen and reposition the cursor
     write(STDOUT_FILENO, "\x1b[2J", 4);
     write(STDOUT_FILENO, "\x1b[H", 3);
 
@@ -45,10 +46,13 @@ void enable_raw_mode(void) {
 
     struct termios raw = editor.original_termios;
 
+    // disable terminal flags that cause problems in raw mode
     raw.c_iflag &= ~(BRKINT | ICRNL | INPCK | ISTRIP | IXON);
     raw.c_oflag &= ~(OPOST);
     raw.c_cflag |= ~(CS8);
     raw.c_lflag &= ~(ECHO | ICANON | IEXTEN | ISIG);
+
+    // set a timeout for the read() function
     raw.c_cc[VMIN] = 0;
     raw.c_cc[VTIME] = 1;
 
@@ -164,6 +168,18 @@ ssize_t get_terminal_size(size_t *rows, size_t *columns) {
     }
 }
 
+
+/**
+ * convert_row_to_render() - convert a characters index into a render index
+ *
+ * @row: the editor row to render
+ * @current_x_position: the current x position of the cursor
+ *
+ * In order to convert the characters index into a render index, we need
+ * to subtract the number of columns past the last tab stop from the tab
+ * stop minus one. This will tell us how many columns are left of the
+ * next tab stop so that we can calculate where the tab stop needs to be.
+ */
 size_t convert_row_to_render(editor_row *row, size_t current_x_position) {
     size_t row_x_position = 0;
 
@@ -214,23 +230,25 @@ void update_row(editor_row *row) {
 
 
 /**
- * append_row() -
+ * append_row() - copy the given string to the end of the editor's rows
  *
+ * @string: the string to copy into the editor
+ * @length: the length of the string
  *
  */
 void append_row(char *string, size_t length) {
-    editor.row = realloc(editor.row, sizeof(editor_row) * (editor.number_rows + 1));
+    editor.rows = realloc(editor.rows, sizeof(editor_row) * (editor.number_rows + 1));
 
-    size_t position = editor.number_rows;
-    editor.row[position].size = length;
-    editor.row[position].characters = malloc(length + 1);
-    memcpy(editor.row[position].characters, string, length);
-    editor.row[position].characters[length] = '\0';
+    size_t index = editor.number_rows;
+    editor.rows[index].size = length;
+    editor.rows[index].characters = malloc(length + 1);
+    memcpy(editor.rows[index].characters, string, length);
+    editor.rows[index].characters[length] = '\0';
 
-    editor.row[position].render = NULL;
-    editor.row[position].render_size = 0;
+    editor.rows[index].render = NULL;
+    editor.rows[index].render_size = 0;
 
-    update_row(&editor.row[position]);
+    update_row(&editor.rows[index]);
 
     editor.number_rows += 1;
 }
@@ -279,7 +297,7 @@ void insert_character(size_t character) {
         append_row("", 0);
     }
 
-    insert_row_character(&editor.row[editor.y_position], editor.x_position, character);
+    insert_row_character(&editor.rows[editor.y_position], editor.x_position, character);
     editor.x_position += 1;
 }
 
@@ -296,12 +314,14 @@ void insert_character(size_t character) {
  * string. Since the buffer is returned, the caller is responsible
  * for freeing the allocated memory.
  *
+ * Return: the string to write to the file
+ *
  */
 char *rows_to_string(size_t *buffer_length) {
     size_t total_length = 0;
 
     for (size_t i = 0; i < editor.number_rows; i++) {
-        total_length += editor.row[i].size + 1;
+        total_length += editor.rows[i].size + 1;
     }
 
     *buffer_length = total_length;
@@ -310,8 +330,8 @@ char *rows_to_string(size_t *buffer_length) {
     char *string = buffer;
 
     for (size_t j = 0; j < editor.number_rows; j++) {
-        memcpy(string, editor.row[j].characters, editor.row[j].size);
-        string += editor.row[j].size;
+        memcpy(string, editor.rows[j].characters, editor.rows[j].size);
+        string += editor.rows[j].size;
         *string = '\n';
         string += 1;
     }
@@ -349,7 +369,6 @@ void save_file(void) {
 /**
  * open_file() - open a file and read its contents into line buffers
  *
- *
  */
 void open_file(char *filename) {
     free(editor.filename);
@@ -378,16 +397,23 @@ void open_file(char *filename) {
 
 
 /**
- * append_to_buffer() -
+ * append_to_buffer() - append the string's contents to the buffer before writing
  *
+ * @buffer: to buffer that the string will be written to
+ * @string: the source string to copy into the buffer
+ * @length: the length of the string that will be copied
+ *
+ * Space is allocated for the current buffer plus the string that will
+ * be added to the buffer. The string is copied into this space and then
+ * transferred to the buffer.
  *
  */
 void append_to_buffer(editor_buffer *buffer, const char *string, ssize_t length)  {
-    char *new = realloc(buffer->data, buffer->length + length);
+    char *new_data = realloc(buffer->data, buffer->length + length);
 
-    if (new != NULL) {
-        memcpy(&new[buffer->length], string, length);
-        buffer->data = new;
+    if (new_data != NULL) {
+        memcpy(&new_data[buffer->length], string, length);
+        buffer->data = new_data;
         buffer->length += length;
     }
 }
@@ -408,21 +434,27 @@ void free_buffer(editor_buffer *buffer) {
 /**
  * draw_editor_rows() - draw each row of the editor to the terminal
  *
+ * @buffer: the editor buffer in which to create rows
+ *
  *
  */
 void draw_editor_rows(editor_buffer *buffer) {
-    for (size_t row = 0; row < editor.screen_rows; row++) {
+    for (size_t row = 0; row < editor.height; row++) {
         size_t filerow = row + editor.row_offset;
+
         if (filerow >= editor.number_rows) {
-            if (editor.number_rows == 0 && row == editor.screen_rows / 3) {
+
+            if (editor.number_rows == 0 && row == editor.height / 3) {
                 char welcome_message[80];
                 size_t welcome_length = snprintf(welcome_message, sizeof(welcome_message),
                                                  "MandeepPAD -- version %s", MPAD_VERSION);
-                if (welcome_length > editor.screen_columns) {
-                    welcome_length = editor.screen_columns;
+
+                if (welcome_length > editor.width) {
+                    welcome_length = editor.width;
                 }
 
-                size_t padding = (editor.screen_columns - welcome_length) / 2;
+                // add padding so that the welcome message appears in the middle of the editor
+                size_t padding = (editor.width - welcome_length) / 2;
 
                 if (padding) {
                     append_to_buffer(buffer, "~", 1);
@@ -438,16 +470,20 @@ void draw_editor_rows(editor_buffer *buffer) {
                 append_to_buffer(buffer, "~", 1);
             }
         } else {
-            ssize_t length = editor.row[filerow].render_size - editor.column_offset;
+            ssize_t length = editor.rows[filerow].render_size - editor.column_offset;
+
             if (length < 0) {
                 length = 0;
             }
-            if ((size_t )length > editor.screen_columns) {
-                length = editor.screen_columns;
+
+            if ((size_t )length > editor.width) {
+                length = editor.width;
             }
-            append_to_buffer(buffer, &editor.row[filerow].render[editor.column_offset], length);
+
+            append_to_buffer(buffer, &editor.rows[filerow].render[editor.column_offset], length);
         }
 
+        // clear each line as we redraw the rows
         append_to_buffer(buffer, "\x1b[K", 3);
         append_to_buffer(buffer, "\r\n", 2);
     }
@@ -470,14 +506,14 @@ void draw_editor_status_bar(editor_buffer *buffer) {
     size_t line_number_length = snprintf(line_number, sizeof(line_number), "%zu/%zu",
                                          editor.y_position + 1, editor.number_rows);
 
-    if (length > editor.screen_columns) {
-        length = editor.screen_columns;
+    if (length > editor.width) {
+        length = editor.width;
     }
 
     append_to_buffer(buffer, status, length);
 
-    while (length < editor.screen_columns) {
-        if (editor.screen_columns - length == line_number_length) {
+    while (length < editor.width) {
+        if (editor.width - length == line_number_length) {
             append_to_buffer(buffer, line_number, line_number_length);
             break;
         } else {
@@ -503,7 +539,7 @@ void scroll_editor(void) {
     editor.render_x_position = 0;
 
     if (editor.y_position < editor.number_rows) {
-        editor.render_x_position = convert_row_to_render(&editor.row[editor.y_position],
+        editor.render_x_position = convert_row_to_render(&editor.rows[editor.y_position],
                                                          editor.x_position);
     }
 
@@ -511,16 +547,16 @@ void scroll_editor(void) {
         editor.row_offset = editor.y_position;
     }
 
-    if (editor.y_position >= editor.row_offset + editor.screen_rows) {
-        editor.row_offset = editor.y_position - editor.screen_rows + 1;
+    if (editor.y_position >= editor.row_offset + editor.height) {
+        editor.row_offset = editor.y_position - editor.height + 1;
     }
 
     if (editor.render_x_position < editor.column_offset) {
         editor.column_offset = editor.render_x_position;
     }
 
-    if (editor.render_x_position >= editor.column_offset + editor.screen_columns) {
-        editor.column_offset = editor.render_x_position - editor.screen_columns + 1;
+    if (editor.render_x_position >= editor.column_offset + editor.width) {
+        editor.column_offset = editor.render_x_position - editor.width + 1;
     }
 }
 
@@ -528,21 +564,19 @@ void scroll_editor(void) {
 /**
  * refresh_screen() - move the cursor to the beginning position and draw the editor rows
  *
- * Escape sequences are sent to the buffer in order to position the cursor to the top
- * left of the editor. Then the
- *
- *
  */
 void refresh_screen(void) {
     editor_buffer buffer = {NULL, 0};
 
     scroll_editor();
+    // hide the cursor prior to refreshing the screen so that the screen doesn't flicker
     append_to_buffer(&buffer, "\x1b[?25l", 6);
     append_to_buffer(&buffer, "\x1b[H", 3);
 
     draw_editor_rows(&buffer);
     draw_editor_status_bar(&buffer);
 
+    // move the cursor to the position stored in x_position and y_positon
     char buff[32];
     snprintf(buff,
             sizeof(buff),
@@ -551,6 +585,7 @@ void refresh_screen(void) {
             editor.render_x_position - editor.column_offset + 1);
     append_to_buffer(&buffer, buff, strlen(buff));
 
+    // show the cursor now that the writing is finished
     append_to_buffer(&buffer, "\x1b[?25h", 6);
 
     write(STDOUT_FILENO, buffer.data, buffer.length);
@@ -565,7 +600,7 @@ void refresh_screen(void) {
  *
  */
 void move_cursor(size_t key) {
-    editor_row *row = editor.y_position > editor.number_rows ? NULL : &editor.row[editor.y_position];
+    editor_row *row = editor.y_position > editor.number_rows ? NULL : &editor.rows[editor.y_position];
 
     switch (key) {
         case ARROW_LEFT:
@@ -573,7 +608,7 @@ void move_cursor(size_t key) {
                 editor.x_position -= 1;
             } else if (editor.y_position > 0) {
                 editor.y_position -= 1;
-                editor.x_position = editor.row[editor.y_position].size;
+                editor.x_position = editor.rows[editor.y_position].size;
             }
             break;
         case ARROW_RIGHT:
@@ -596,7 +631,7 @@ void move_cursor(size_t key) {
             break;
     }
 
-    row = editor.y_position >= editor.number_rows ? NULL : &editor.row[editor.y_position];
+    row = editor.y_position >= editor.number_rows ? NULL : &editor.rows[editor.y_position];
     size_t row_length = row ? row->size : 0;
     if (editor.x_position > row_length) {
         editor.x_position = row_length;
@@ -634,7 +669,7 @@ void process_keypress(void) {
 
         case END_KEY:
             if (editor.y_position < editor.number_rows) {
-                editor.x_position = editor.row[editor.y_position].size;
+                editor.x_position = editor.rows[editor.y_position].size;
             }
             break;
 
@@ -649,12 +684,12 @@ void process_keypress(void) {
                 if (character == PAGE_UP) {
                     editor.y_position = editor.row_offset;
                 } else if (character == PAGE_DOWN) {
-                    editor.y_position = editor.row_offset + editor.screen_rows - 1;
+                    editor.y_position = editor.row_offset + editor.height - 1;
                     if (editor.y_position > editor.number_rows) {
                         editor.y_position = editor.number_rows;
                     }
                 }
-                size_t times = editor.screen_rows;
+                size_t times = editor.height;
                 while (times--) {
                     move_cursor(character == PAGE_UP ? ARROW_UP : ARROW_DOWN);
                 }
@@ -690,15 +725,15 @@ void initialize_editor(void) {
     editor.row_offset = 0;
     editor.column_offset = 0;
     editor.number_rows = 0;
-    editor.row = NULL;
+    editor.rows = NULL;
     editor.filename = NULL;
 
-    if (get_terminal_size(&editor.screen_rows, &editor.screen_columns) == -1) {
+    if (get_terminal_size(&editor.height, &editor.width) == -1) {
         quit("get_terminal_size");
     }
 
     // decrement screen rows by 1 so that there is an extra line in which to draw a status bar
-    editor.screen_rows -= 1;
+    editor.height -= 1;
 }
 
 
