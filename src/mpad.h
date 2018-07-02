@@ -8,16 +8,15 @@
 #include <sys/types.h>
 #include <termios.h>
 #include <unistd.h>
-
 #include <termios.h>
 
 
 #ifndef MPAD_H_
 #define MPAD_H_
 
+
 #define MPAD_VERSION "0.0.1"
 #define CTRL_KEY(k) ((k) & 0x1f)
-
 #define MPAD_TAB_STOP 8
 
 enum editor_keys {
