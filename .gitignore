@@ -7,8 +7,9 @@
 # Unignore all dirs
 !*/
 
-# Unignore makefile
+# Files to unignore
 !Makefile
+!README
 
 # Prerequisites
 *.d
