@@ -301,6 +301,34 @@ void insert_character(size_t character) {
     editor.x_position += 1;
 }
 
+/**
+ * delete_row_character() - delete the character in the given row at the given index
+ *
+ * @row: the row in which the character to delete resides
+ * @index: the index of the character
+ */
+void delete_row_character(editor_row *row, size_t index) {
+    if (index < row->size) {
+        memmove(&row->characters[index], &row->characters[index + 1], row->size - index);
+        row->size -= 1;
+        update_row(row);
+    }
+}
+
+
+/**
+ * delete_character() - delete a character from the editor at the current cursor position
+ *
+ */
+void delete_character(void) {
+    if (editor.y_position != editor.number_rows) {
+        editor_row *row = &editor.rows[editor.y_position];
+        if (editor.x_position > 0) {
+            delete_row_character(row, editor.x_position - 1);
+            editor.x_position -= 1;
+        }
+    }
+}
 
 /**
  * row_to_string() - convert the editor rows into a single string
@@ -715,6 +743,10 @@ void process_keypress(void) {
         case BACKSPACE:
         case CTRL_KEY('h'):
         case DELETE_KEY:
+            if (character == DELETE_KEY) {
+                move_cursor(ARROW_RIGHT);
+            }
+            delete_character();
             break;
 
         case PAGE_UP:

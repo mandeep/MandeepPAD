@@ -121,6 +121,10 @@ void insert_row_character(editor_row *row, size_t index, size_t character);
 
 void insert_character(size_t character);
 
+void delete_row_character(editor_row *row, size_t index);
+
+void delete_character(void);
+
 char *rows_to_string(size_t *buffer_length);
 
 void open_file(char *filename);
