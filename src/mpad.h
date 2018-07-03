@@ -1,14 +1,15 @@
 #include <ctype.h>
 #include <errno.h>
 #include <fcntl.h>
+#include <stdarg.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 #include <sys/ioctl.h>
 #include <sys/types.h>
 #include <termios.h>
+#include <time.h>
 #include <unistd.h>
-#include <termios.h>
 
 
 #ifndef MPAD_H_
@@ -76,6 +77,8 @@ typedef struct editor_configuration {
     size_t number_rows;
     editor_row *rows;
     char *filename;
+    char status_message[80];
+    time_t status_message_time;
     struct termios original_termios;
 } editor_configuration;
 
@@ -130,9 +133,13 @@ void draw_editor_rows(editor_buffer *buffer);
 
 void draw_editor_status_bar(editor_buffer *buffer);
 
+void draw_editor_status_message(editor_buffer *buffer);
+
 void scroll_editor(void);
 
 void refresh_screen(void);
+
+void set_status_message(const char *format, ...);
 
 void move_cursor(size_t key);
 

@@ -524,8 +524,32 @@ void draw_editor_status_bar(editor_buffer *buffer) {
 
     // switch back to normal formatting with the \x1b[m escape sequence]
     append_to_buffer(buffer, "\x1b[m", 3);
+
+    // add a blank line for that status message bar
+    append_to_buffer(buffer, "\r\n", 2);
 }
 
+
+/**
+ * draw_editor_status_message() - draw a status message bar beneath the message bar
+ *
+ * @buffer: the buffer in which to draw the bar
+ */
+void draw_editor_status_message(editor_buffer *buffer) {
+    // clear the message bar
+    append_to_buffer(buffer, "\x1b[K", 3);
+
+    size_t message_length = strlen(editor.status_message);
+    if (message_length > editor.width) {
+        message_length = editor.width;
+    }
+
+    // set the message to disappear after a key is pressed but only if
+    // five seconds have passed
+    if (message_length && time(NULL) - editor.status_message_time < 5) {
+        append_to_buffer(buffer, editor.status_message, message_length);
+    }
+}
 
 /**
  * scroll_editor() - scroll the editor when the cursor has moved outside the window
@@ -575,6 +599,7 @@ void refresh_screen(void) {
 
     draw_editor_rows(&buffer);
     draw_editor_status_bar(&buffer);
+    draw_editor_status_message(&buffer);
 
     // move the cursor to the position stored in x_position and y_positon
     char buff[32];
@@ -590,6 +615,20 @@ void refresh_screen(void) {
 
     write(STDOUT_FILENO, buffer.data, buffer.length);
     free_buffer(&buffer);
+}
+
+
+/**
+ * set_status_message() - set the status message of the status message bar
+ *
+ * @format: the format that needs to be passed to va_start and vsnprintf
+ */
+void set_status_message(const char *format, ...) {
+    va_list ap;
+    va_start(ap, format);
+    vsnprintf(editor.status_message, sizeof(editor.status_message), format, ap);
+    va_end(ap);
+    editor.status_message_time = time(NULL);
 }
 
 
@@ -727,13 +766,16 @@ void initialize_editor(void) {
     editor.number_rows = 0;
     editor.rows = NULL;
     editor.filename = NULL;
+    editor.status_message[0] = '\0';
+    editor.status_message_time = 0;
 
     if (get_terminal_size(&editor.height, &editor.width) == -1) {
         quit("get_terminal_size");
     }
 
-    // decrement screen rows by 1 so that there is an extra line in which to draw a status bar
-    editor.height -= 1;
+    // decrement screen rows by 2 so that there are two extra lines
+    // in which to draw the status bar and status message
+    editor.height -= 2;
 }
 
 
@@ -744,6 +786,8 @@ int main(int argc, char **argv) {
     if (argc >= 2) {
         open_file(argv[1]);
     }
+
+    set_status_message("HELP: Ctrl+Q to quit");
 
     while (1) {
         refresh_screen();
