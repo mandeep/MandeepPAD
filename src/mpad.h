@@ -63,6 +63,8 @@ typedef struct editor_row {
  * @number_rows: the total number of rows in the editor that are filled with characters
  * @rows: the lines in all of the rows in the editor
  * @filename: the filename of the file currently read into the buffer
+ * @status_message: the status message that will be displayed on screen
+ * @status_message_time: the timestamp when the status message is displayed
  * @original_termios: the original terminal attributes before modification
  *
  */
