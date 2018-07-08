@@ -230,28 +230,62 @@ void update_row(editor_row *row) {
 
 
 /**
- * append_row() - copy the given string to the end of the editor's rows
+ * insert_row() - copy the given string to the end of the editor's rows
  *
  * @string: the string to copy into the editor
  * @length: the length of the string
  *
  */
-void append_row(char *string, size_t length) {
-    editor.rows = realloc(editor.rows, sizeof(editor_row) * (editor.number_rows + 1));
+void insert_row(size_t index, char *string, size_t length) {
 
-    size_t index = editor.number_rows;
-    editor.rows[index].size = length;
-    editor.rows[index].characters = malloc(length + 1);
-    memcpy(editor.rows[index].characters, string, length);
-    editor.rows[index].characters[length] = '\0';
+    if (index <= editor.number_rows) {
 
-    editor.rows[index].render = NULL;
-    editor.rows[index].render_size = 0;
+        editor.rows = realloc(editor.rows, sizeof(editor_row) * (editor.number_rows + 1));
+        memmove(&editor.rows[index + 1], &editor.rows[index],
+                sizeof(editor_row) * (editor.number_rows - 1));
 
-    update_row(&editor.rows[index]);
+        editor.rows[index].size = length;
+        editor.rows[index].characters = malloc(length + 1);
+        memcpy(editor.rows[index].characters, string, length);
+        editor.rows[index].characters[length] = '\0';
 
-    editor.number_rows += 1;
-    editor.dirty = 1;
+        editor.rows[index].render = NULL;
+        editor.rows[index].render_size = 0;
+
+        update_row(&editor.rows[index]);
+
+        editor.number_rows += 1;
+        editor.dirty = 1;
+    }
+}
+
+
+/**
+ * free_row() - free the given row from memory
+ *
+ * @row: the row to free from memory
+ *
+ */
+void free_row(editor_row *row) {
+    free(row->render);
+    free(row->characters);
+}
+
+
+/**
+ * delete_row() - delete the row at the given index from the buffer
+ *
+ * @index: the index of the row to delete
+ *
+ */
+void delete_row(size_t index) {
+    if (index < editor.number_rows) {
+        free_row(&editor.rows[index]);
+        memmove(&editor.rows[index], &editor.rows[index + 1],
+                sizeof(editor_row) * (editor.number_rows - index - 1));
+        editor.number_rows -= 1;
+        editor.dirty = 1;
+    }
 }
 
 
@@ -296,12 +330,31 @@ void insert_row_character(editor_row *row, size_t index, size_t character) {
  */
 void insert_character(size_t character) {
     if (editor.y_position == editor.number_rows) {
-        append_row("", 0);
+        insert_row(editor.number_rows, "", 0);
     }
 
     insert_row_character(&editor.rows[editor.y_position], editor.x_position, character);
     editor.x_position += 1;
 }
+
+
+/**
+ * append_row_string() - append a string to the end of a row
+ *
+ * @row: the row in which to append the string
+ * @string: the string to append
+ * @length: the length of the string
+ *
+ */
+void append_row_string(editor_row *row, char *string, size_t length) {
+    row->characters = realloc(row->characters, row->size + length + 1);
+    memcpy(&row->characters[row->size], string, length);
+    row->size += length;
+    row->characters[row->size] = '\0';
+    update_row(row);
+    editor.dirty = 1;
+}
+
 
 /**
  * delete_row_character() - delete the character in the given row at the given index
@@ -323,14 +376,22 @@ void delete_row_character(editor_row *row, size_t index) {
  *
  */
 void delete_character(void) {
-    if (editor.y_position != editor.number_rows) {
+    if ((editor.y_position != editor.number_rows) ||
+        (editor.x_position != 0 && editor.y_position != 0) ) {
+
         editor_row *row = &editor.rows[editor.y_position];
         if (editor.x_position > 0) {
             delete_row_character(row, editor.x_position - 1);
             editor.x_position -= 1;
+        } else {
+            editor.x_position = editor.rows[editor.y_position - 1].size;
+            append_row_string(&editor.rows[editor.y_position - 1], row->characters, row->size);
+            delete_row(editor.y_position);
+            editor.y_position -= 1;
         }
     }
 }
+
 
 /**
  * row_to_string() - convert the editor rows into a single string
@@ -421,7 +482,7 @@ void open_file(char *filename) {
                                    line[line_length - 1] == '\r')) {
             line_length -= 1;
         }
-        append_row(line, line_length);
+        insert_row(editor.number_rows, line, line_length);
     }
 
     free(line);
