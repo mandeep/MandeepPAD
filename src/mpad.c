@@ -388,6 +388,7 @@ void delete_row_character(editor_row *row, size_t index) {
         memmove(&row->characters[index], &row->characters[index + 1], row->size - index);
         row->size -= 1;
         update_row(row);
+        editor.dirty = 1;
     }
 }
 
@@ -398,7 +399,7 @@ void delete_row_character(editor_row *row, size_t index) {
  */
 void delete_character(void) {
     if ((editor.y_position != editor.number_rows) ||
-        (editor.x_position != 0 && editor.y_position != 0) ) {
+        (editor.x_position != 0 || editor.y_position != 0)) {
 
         editor_row *row = &editor.rows[editor.y_position];
         if (editor.x_position > 0) {
@@ -551,7 +552,6 @@ void free_buffer(editor_buffer *buffer) {
  * draw_editor_rows() - draw each row of the editor to the terminal
  *
  * @buffer: the editor buffer in which to create rows
- *
  *
  */
 void draw_editor_rows(editor_buffer *buffer) {
