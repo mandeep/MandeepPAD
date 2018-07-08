@@ -458,6 +458,13 @@ char *rows_to_string(size_t *buffer_length) {
  *
  */
 void save_file(void) {
+    if (editor.filename == NULL) {
+        editor.filename = show_prompt("Save as: %s (ESC to cancel)");
+        if (editor.filename == NULL) {
+            set_status_message("Save aborted.");
+        }
+    }
+
     if (editor.filename != NULL) {
         size_t length;
         char *buffer = rows_to_string(&length);
@@ -746,6 +753,48 @@ void set_status_message(const char *format, ...) {
     vsnprintf(editor.status_message, sizeof(editor.status_message), format, ap);
     va_end(ap);
     editor.status_message_time = time(NULL);
+}
+
+
+/**
+ * show_prompt() - show a prompt to the user when input is needed
+ *
+ * @prompt: the format string of the user's input
+ */
+char *show_prompt(char *prompt) {
+    size_t prompt_size = 128;
+    char *prompt_buffer = malloc(prompt_size);
+    size_t prompt_length = 0;
+
+    prompt_buffer[0] = '\0';
+
+    while (1) {
+        set_status_message(prompt, prompt_buffer);
+        refresh_screen();
+
+        size_t character = read_key();
+        if (character == DELETE_KEY || character == CTRL_KEY('h') || character == BACKSPACE) {
+            if (prompt_length != 0) {
+                prompt_buffer[--prompt_length] = '\0';
+            }
+        } else if (character == '\x1b') {
+            set_status_message("");
+            free(prompt_buffer);
+            return NULL;
+        } else if (character == '\r') {
+            if (prompt_length != 0) {
+                set_status_message("");
+                return prompt_buffer;
+            }
+        } else if (!iscntrl(character) && character < 128) {
+            if (prompt_length == prompt_size - 1) {
+                prompt_size *= 2;
+                prompt_buffer = realloc(prompt_buffer, prompt_size);
+            }
+            prompt_buffer[prompt_length++] = character;
+            prompt_buffer[prompt_length] = '\0';
+        }
+    }
 }
 
 

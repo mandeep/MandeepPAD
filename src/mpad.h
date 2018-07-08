@@ -157,6 +157,8 @@ void refresh_screen(void);
 
 void set_status_message(const char *format, ...);
 
+char *show_prompt(char *prompt);
+
 void move_cursor(size_t key);
 
 void process_keypress(void);
