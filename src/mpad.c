@@ -721,6 +721,8 @@ void move_cursor(size_t key) {
  *
  */
 void process_keypress(void) {
+    static size_t quit_keypresses = MPAD_QUIT_KEYPRESSES;
+
     size_t character = read_key();
 
     switch (character) {
@@ -728,9 +730,16 @@ void process_keypress(void) {
             break;
 
         case CTRL_KEY('q'):
-            write(STDOUT_FILENO, "\x1b[2J", 4);
-            write(STDOUT_FILENO, "\x1b[H", 3);
-            exit(0);
+            if (editor.dirty && quit_keypresses > 0) {
+                set_status_message("File has unsaved changes. "
+                                   "Press Ctrl+Q one more time to quit.");
+                quit_keypresses -= 1;
+                return;
+            } else {
+                write(STDOUT_FILENO, "\x1b[2J", 4);
+                write(STDOUT_FILENO, "\x1b[H", 3);
+                exit(0);
+            }
             break;
 
         case CTRL_KEY('s'):
@@ -790,6 +799,7 @@ void process_keypress(void) {
             insert_character(character);
             break;
     }
+    quit_keypresses = MPAD_QUIT_KEYPRESSES;
 }
 
 /**

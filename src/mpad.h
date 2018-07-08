@@ -19,6 +19,7 @@
 #define MPAD_VERSION "0.0.1"
 #define CTRL_KEY(k) ((k) & 0x1f)
 #define MPAD_TAB_STOP 8
+#define MPAD_QUIT_KEYPRESSES 1
 
 enum editor_keys {
     BACKSPACE = 127,
