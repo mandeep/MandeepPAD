@@ -237,12 +237,11 @@ void update_row(editor_row *row) {
  *
  */
 void insert_row(size_t index, char *string, size_t length) {
-
     if (index <= editor.number_rows) {
 
         editor.rows = realloc(editor.rows, sizeof(editor_row) * (editor.number_rows + 1));
         memmove(&editor.rows[index + 1], &editor.rows[index],
-                sizeof(editor_row) * (editor.number_rows - 1));
+                sizeof(editor_row) * (editor.number_rows - index));
 
         editor.rows[index].size = length;
         editor.rows[index].characters = malloc(length + 1);
@@ -335,6 +334,28 @@ void insert_character(size_t character) {
 
     insert_row_character(&editor.rows[editor.y_position], editor.x_position, character);
     editor.x_position += 1;
+}
+
+
+/**
+ * insert_newline() - insert a new row when the enter key is pressed
+ *
+ */
+void insert_newline(void) {
+    if (editor.x_position == 0) {
+        insert_row(editor.y_position, "", 0);
+    } else {
+        editor_row *row = &editor.rows[editor.y_position];
+        insert_row(editor.y_position + 1,
+                   &row->characters[editor.x_position],
+                   row->size - editor.x_position);
+        row = &editor.rows[editor.y_position];
+        row->size = editor.x_position;
+        row->characters[row->size] = '\0';
+        update_row(row);
+    }
+    editor.y_position += 1;
+    editor.x_position = 0;
 }
 
 
@@ -788,6 +809,7 @@ void process_keypress(void) {
 
     switch (character) {
         case '\r':
+            insert_newline();
             break;
 
         case CTRL_KEY('q'):
