@@ -78,6 +78,7 @@ typedef struct editor_configuration {
     size_t width;
     size_t number_rows;
     editor_row *rows;
+    size_t dirty;
     char *filename;
     char status_message[80];
     time_t status_message_time;

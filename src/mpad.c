@@ -251,6 +251,7 @@ void append_row(char *string, size_t length) {
     update_row(&editor.rows[index]);
 
     editor.number_rows += 1;
+    editor.dirty = 1;
 }
 
 
@@ -280,6 +281,7 @@ void insert_row_character(editor_row *row, size_t index, size_t character) {
     row->characters[index] = character;
     row->size += 1;
     update_row(row);
+    editor.dirty = 1;
 }
 
 
@@ -384,11 +386,14 @@ void save_file(void) {
                 if (write(destination_file, buffer, length) == (int) length) {
                     close(destination_file);
                     free(buffer);
+                    editor.dirty = 0;
+                    set_status_message("%zu bytes written to disk", length);
                 }
             }
         } else {
             close(destination_file);
             free(buffer);
+            set_status_message("Error writing to disk: %s", strerror(errno));
         }
     }
 }
@@ -421,6 +426,7 @@ void open_file(char *filename) {
 
     free(line);
     fclose(file);
+    editor.dirty = 0;
 }
 
 
@@ -527,8 +533,9 @@ void draw_editor_status_bar(editor_buffer *buffer) {
     append_to_buffer(buffer, "\x1b[7m", 4);
 
     char status[80];
-    size_t length = snprintf(status, sizeof(status), "%s",
-                             editor.filename ? editor.filename : "[No Filename]");
+    size_t length = snprintf(status, sizeof(status), "%s %s",
+                             editor.filename ? editor.filename : "[No Filename]",
+                             editor.dirty ? "(modified)" : "");
 
     char line_number[80];
     size_t line_number_length = snprintf(line_number, sizeof(line_number), "%zu/%zu",
@@ -797,6 +804,7 @@ void initialize_editor(void) {
     editor.column_offset = 0;
     editor.number_rows = 0;
     editor.rows = NULL;
+    editor.dirty = 0;
     editor.filename = NULL;
     editor.status_message[0] = '\0';
     editor.status_message_time = 0;
@@ -819,7 +827,7 @@ int main(int argc, char **argv) {
         open_file(argv[1]);
     }
 
-    set_status_message("HELP: Ctrl+Q to quit");
+    set_status_message("HELP: Ctrl+S to save | Ctrl+Q to quit");
 
     while (1) {
         refresh_screen();
