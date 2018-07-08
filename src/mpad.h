@@ -117,11 +117,19 @@ size_t convert_row_to_render(editor_row *row, size_t current_x_position);
 
 void update_row(editor_row *row);
 
-void append_row(char *string, size_t length);
+void insert_row(size_t index, char *string, size_t length);
+
+void free_row(editor_row *row);
+
+void delete_row(size_t index);
 
 void insert_row_character(editor_row *row, size_t index, size_t character);
 
 void insert_character(size_t character);
+
+void append_row_string(editor_row *row, char *string, size_t length);
+
+void insert_newline(void);
 
 void delete_row_character(editor_row *row, size_t index);
 
