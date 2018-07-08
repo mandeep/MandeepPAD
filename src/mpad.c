@@ -459,7 +459,7 @@ char *rows_to_string(size_t *buffer_length) {
  */
 void save_file(void) {
     if (editor.filename == NULL) {
-        editor.filename = show_prompt("Save as: %s (ESC to cancel)");
+        editor.filename = show_prompt("Save as: %s");
         if (editor.filename == NULL) {
             set_status_message("Save aborted.");
         }
