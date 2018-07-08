@@ -102,7 +102,7 @@ size_t read_key(void) {
                     switch (sequence[1]) {
                         case '1':
                             return HOME_KEY;
-                        case '2':
+                        case '3':
                             return DELETE_KEY;
                         case '4':
                             return END_KEY;
