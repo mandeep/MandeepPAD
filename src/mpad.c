@@ -254,7 +254,7 @@ void insert_row(size_t index, char *string, size_t length) {
         update_row(&editor.rows[index]);
 
         editor.number_rows += 1;
-        editor.dirty = 1;
+        editor.dirty = true;
     }
 }
 
@@ -283,7 +283,7 @@ void delete_row(size_t index) {
         memmove(&editor.rows[index], &editor.rows[index + 1],
                 sizeof(editor_row) * (editor.number_rows - index - 1));
         editor.number_rows -= 1;
-        editor.dirty = 1;
+        editor.dirty = true;
     }
 }
 
@@ -314,7 +314,7 @@ void insert_row_character(editor_row *row, size_t index, size_t character) {
     row->characters[index] = character;
     row->size += 1;
     update_row(row);
-    editor.dirty = 1;
+    editor.dirty = true;
 }
 
 
@@ -373,7 +373,7 @@ void append_row_string(editor_row *row, char *string, size_t length) {
     row->size += length;
     row->characters[row->size] = '\0';
     update_row(row);
-    editor.dirty = 1;
+    editor.dirty = true;
 }
 
 
@@ -388,7 +388,7 @@ void delete_row_character(editor_row *row, size_t index) {
         memmove(&row->characters[index], &row->characters[index + 1], row->size - index);
         row->size -= 1;
         update_row(row);
-        editor.dirty = 1;
+        editor.dirty = true;
     }
 }
 
@@ -476,7 +476,7 @@ void save_file(void) {
                 if (write(destination_file, buffer, length) == (int) length) {
                     close(destination_file);
                     free(buffer);
-                    editor.dirty = 0;
+                    editor.dirty = false;
                     set_status_message("%zu bytes written to disk", length);
                 }
             }
@@ -516,7 +516,7 @@ void open_file(char *filename) {
 
     free(line);
     fclose(file);
-    editor.dirty = 0;
+    editor.dirty = false;
 }
 
 
@@ -862,7 +862,7 @@ void process_keypress(void) {
             break;
 
         case CTRL_KEY('q'):
-            if (editor.dirty && quit_keypresses > 0) {
+            if (editor.dirty == true && quit_keypresses > 0) {
                 set_status_message("File has unsaved changes. "
                                    "Press Ctrl+Q one more time to quit.");
                 quit_keypresses -= 1;
@@ -946,7 +946,7 @@ void initialize_editor(void) {
     editor.column_offset = 0;
     editor.number_rows = 0;
     editor.rows = NULL;
-    editor.dirty = 0;
+    editor.dirty = false;
     editor.filename = NULL;
     editor.status_message[0] = '\0';
     editor.status_message_time = 0;
