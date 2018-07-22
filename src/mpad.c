@@ -266,8 +266,13 @@ void insert_row(size_t index, char *string, size_t length) {
  *
  */
 void free_row(editor_row *row) {
-    free(row->render);
-    free(row->characters);
+    if (row != NULL) {
+        free(row->render);
+        row->render = NULL;
+
+        free(row->characters);
+        row->characters = NULL;
+    }
 }
 
 
