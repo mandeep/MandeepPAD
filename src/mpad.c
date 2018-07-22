@@ -403,19 +403,22 @@ void delete_row_character(editor_row *row, size_t index) {
  *
  */
 void delete_character(void) {
-    if ((editor.y_position != editor.number_rows) ||
-        (editor.x_position != 0 || editor.y_position != 0)) {
+    if (editor.y_position == editor.number_rows) {
+        return;
+    }
+    if (editor.x_position == 0 && editor.y_position == 0) {
+        return;
+    }
 
-        editor_row *row = &editor.rows[editor.y_position];
-        if (editor.x_position > 0) {
-            delete_row_character(row, editor.x_position - 1);
-            editor.x_position -= 1;
-        } else {
-            editor.x_position = editor.rows[editor.y_position - 1].size;
-            append_row_string(&editor.rows[editor.y_position - 1], row->characters, row->size);
-            delete_row(editor.y_position);
-            editor.y_position -= 1;
-        }
+    editor_row *row = &editor.rows[editor.y_position];
+    if (editor.x_position > 0) {
+        delete_row_character(row, editor.x_position - 1);
+        editor.x_position -= 1;
+    } else {
+        editor.x_position = editor.rows[editor.y_position - 1].size;
+        append_row_string(&editor.rows[editor.y_position - 1], row->characters, row->size);
+        delete_row(editor.y_position);
+        editor.y_position -= 1;
     }
 }
 
