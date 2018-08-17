@@ -484,14 +484,24 @@ void save_file(void) {
             if (ftruncate(destination_file, length) != -1) {
                 if (write(destination_file, buffer, length) == (int) length) {
                     close(destination_file);
-                    free(buffer);
+
+                    if (buffer != NULL) {
+                        free(buffer);
+                        buffer = NULL;
+                    }
+
                     editor.dirty = false;
                     set_status_message("%zu bytes written to disk", length);
                 }
             }
         } else {
             close(destination_file);
-            free(buffer);
+
+            if (buffer != NULL) {
+                free(buffer);
+                buffer = NULL;
+            }
+
             set_status_message("Error writing to disk: %s", strerror(errno));
         }
     }
@@ -503,7 +513,11 @@ void save_file(void) {
  *
  */
 void open_file(char *filename) {
-    free(editor.filename);
+    if (editor.filename != NULL) {
+        free(editor.filename);
+        editor.filename = NULL;
+    }
+
     editor.filename = strdup(filename);
 
     FILE *file = fopen(filename, "r");
@@ -523,7 +537,11 @@ void open_file(char *filename) {
         insert_row(editor.number_rows, line, line_length);
     }
 
-    free(line);
+    if (line != NULL) {
+        free(line);
+        line = NULL;
+    }
+
     fclose(file);
     editor.dirty = false;
 }
