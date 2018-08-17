@@ -209,7 +209,11 @@ void update_row(editor_row *row) {
         }
     }
 
-    free(row->render);
+    if (row->render != NULL) {
+        free(row->render);
+        row->render = NULL;
+    }
+
     row->render = malloc(row->size + tabs * MPAD_TAB_STOP + 1);
 
     size_t index = 0;
