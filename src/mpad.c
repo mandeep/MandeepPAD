@@ -209,10 +209,8 @@ void update_row(editor_row *row) {
         }
     }
 
-    if (row->render != NULL) {
-        free(row->render);
-        row->render = NULL;
-    }
+    free(row->render);
+    row->render = NULL;
 
     row->render = malloc(row->size + tabs * MPAD_TAB_STOP + 1);
 
@@ -270,13 +268,11 @@ void insert_row(size_t index, char *string, size_t length) {
  *
  */
 void free_row(editor_row *row) {
-    if (row->render != NULL && row->characters != NULL) {
-        free(row->render);
-        row->render = NULL;
+    free(row->render);
+    row->render = NULL;
 
-        free(row->characters);
-        row->characters = NULL;
-    }
+    free(row->characters);
+    row->characters = NULL;
 }
 
 
@@ -484,24 +480,16 @@ void save_file(void) {
             if (ftruncate(destination_file, length) != -1) {
                 if (write(destination_file, buffer, length) == (int) length) {
                     close(destination_file);
-
-                    if (buffer != NULL) {
-                        free(buffer);
-                        buffer = NULL;
-                    }
-
+                    free(buffer);
+                    buffer = NULL;
                     editor.dirty = false;
                     set_status_message("%zu bytes written to disk", length);
                 }
             }
         } else {
             close(destination_file);
-
-            if (buffer != NULL) {
-                free(buffer);
-                buffer = NULL;
-            }
-
+            free(buffer);
+            buffer = NULL;
             set_status_message("Error writing to disk: %s", strerror(errno));
         }
     }
@@ -513,11 +501,8 @@ void save_file(void) {
  *
  */
 void open_file(char *filename) {
-    if (editor.filename != NULL) {
-        free(editor.filename);
-        editor.filename = NULL;
-    }
-
+    free(editor.filename);
+    editor.filename = NULL;
     editor.filename = strdup(filename);
 
     FILE *file = fopen(filename, "r");
@@ -537,10 +522,8 @@ void open_file(char *filename) {
         insert_row(editor.number_rows, line, line_length);
     }
 
-    if (line != NULL) {
-        free(line);
-        line = NULL;
-    }
+    free(line);
+    line = NULL;
 
     fclose(file);
     editor.dirty = false;
@@ -575,10 +558,8 @@ void append_to_buffer(editor_buffer *buffer, const char *string, ssize_t length)
  *
  */
 void free_buffer(editor_buffer *buffer) {
-    if (buffer->data != NULL) {
-        free(buffer->data);
-        buffer->data = NULL;
-    }
+    free(buffer->data);
+    buffer->data = NULL;
 }
 
 
@@ -807,6 +788,7 @@ char *show_prompt(char *prompt) {
         } else if (character == '\x1b') {
             set_status_message("");
             free(prompt_buffer);
+            prompt_buffer = NULL;
             return NULL;
         } else if (character == '\r') {
             if (prompt_length != 0) {
